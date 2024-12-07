@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
-import "./styles.css"; // Import the external CSS file
+import { Button, Box, IconButton, Stack } from "@mui/material";
+import { PhotoCamera, FlipCameraAndroid } from "@mui/icons-material";
+import "./styles.css";
 
 const CameraComponent = () => {
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [useNativeCamera, setUseNativeCamera] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [cameraFacingMode, setCameraFacingMode] = useState("environment");
   const webcamRef = useRef(null);
@@ -12,22 +14,69 @@ const CameraComponent = () => {
     facingMode: cameraFacingMode,
   };
 
-  const handleCapture = () => {
+  // Handle in-app camera capture
+  const handleInAppCapture = () => {
     const image = webcamRef.current.getScreenshot();
     setImageSrc(image);
-    setIsCameraOpen(false);
   };
 
+  // Switch camera facing mode
   const handleSwitchCamera = () => {
     setCameraFacingMode((prev) =>
       prev === "environment" ? "user" : "environment"
     );
   };
 
+  // Handle native camera file selection
+  const handleNativeFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setImageSrc(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
-    <div className="container">
-      {isCameraOpen ? (
-        <div className="cameraView">
+    <Box className="container">
+      {imageSrc ? (
+        <Box className="imagePreviewContainer">
+          <img src={imageSrc} alt="Captured" className="imagePreview" />
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => setImageSrc(null)}
+          >
+            Retake
+          </Button>
+        </Box>
+      ) : useNativeCamera ? (
+        <Box>
+          <label>
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleNativeFileChange}
+              className="fileInput"
+            />
+            <Button variant="contained" color="primary" component="span">
+              Launch Camera
+            </Button>
+          </label>
+          <Button
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            onClick={() => setUseNativeCamera(false)}
+            style={{ marginTop: "20px" }}
+          >
+            Switch to Web Camera
+          </Button>
+        </Box>
+      ) : (
+        <Box className="cameraView">
           <Webcam
             audio={false}
             ref={webcamRef}
@@ -35,38 +84,34 @@ const CameraComponent = () => {
             videoConstraints={videoConstraints}
             className="webcam"
           />
-          <div className="buttonContainer">
-            <button className="switchButton" onClick={handleSwitchCamera}>
-              🔄 Switch Camera
-            </button>
-            <button className="captureButton" onClick={handleCapture}>
-              📸 Capture
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div>
-          {imageSrc ? (
-            <div>
-              <img src={imageSrc} alt="Captured" className="imagePreview" />
-              <button
-                className="cameraButton"
-                onClick={() => setIsCameraOpen(true)}
-              >
-                📷 Retake
-              </button>
-            </div>
-          ) : (
-            <button
-              className="cameraButton"
-              onClick={() => setIsCameraOpen(true)}
+          <Stack direction="row" spacing={2} className="buttonContainer">
+            <IconButton
+              color="secondary"
+              onClick={handleSwitchCamera}
+              className="switchButton"
             >
-              📷 Open Camera
-            </button>
-          )}
-        </div>
+              <FlipCameraAndroid fontSize="large" />
+            </IconButton>
+            <IconButton
+              color="primary"
+              onClick={handleInAppCapture}
+              className="captureButton"
+            >
+              <PhotoCamera fontSize="large" />
+            </IconButton>
+          </Stack>
+          <Button
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            onClick={() => setUseNativeCamera(true)}
+            style={{ marginTop: "20px" }}
+          >
+            Use Camera App
+          </Button>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 
