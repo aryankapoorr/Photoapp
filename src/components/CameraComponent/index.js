@@ -51,64 +51,63 @@ const CameraComponent = () => {
             Retake
           </Button>
         </Box>
-      ) : useNativeCamera ? (
-        <Box>
-          <label>
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={handleNativeFileChange}
-              className="fileInput"
-            />
-            <Button variant="contained" color="primary" component="span">
-              Launch Camera
-            </Button>
-          </label>
-          <Button
-            variant="outlined"
-            color="secondary"
-            fullWidth
-            onClick={() => setUseNativeCamera(false)}
-            style={{ marginTop: "20px" }}
-          >
-            Switch to Web Camera
-          </Button>
-        </Box>
       ) : (
-        <Box className="cameraView">
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-            className="webcam"
-          />
-          <Stack direction="row" spacing={2} className="buttonContainer">
-            <IconButton
-              color="secondary"
-              onClick={handleSwitchCamera}
-              className="switchButton"
-            >
-              <FlipCameraAndroid fontSize="large" />
-            </IconButton>
-            <IconButton
-              color="primary"
-              onClick={handleInAppCapture}
-              className="captureButton"
-            >
-              <PhotoCamera fontSize="large" />
-            </IconButton>
-          </Stack>
+        <Box>
+          {/* Single button for file input */}
           <Button
-            variant="outlined"
-            color="secondary"
-            fullWidth
-            onClick={() => setUseNativeCamera(true)}
-            style={{ marginTop: "20px" }}
+            variant="contained"
+            onClick={() => document.getElementById("file-input").click()}
           >
-            Use Camera App
+            Choose File
           </Button>
+
+          <input
+            type="file"
+            id="file-input"
+            style={{ display: "none" }}
+            accept="image/*"
+            onChange={handleNativeFileChange}
+          />
+
+          {!useNativeCamera && (
+            <Box className="cameraView">
+              <Webcam
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                className="webcam"
+              />
+              <Stack direction="row" spacing={2} className="buttonContainer">
+                <IconButton
+                  color="secondary"
+                  onClick={handleSwitchCamera}
+                  className="switchButton"
+                >
+                  <FlipCameraAndroid fontSize="large" />
+                </IconButton>
+                <IconButton
+                  color="primary"
+                  onClick={handleInAppCapture}
+                  className="captureButton"
+                >
+                  <PhotoCamera fontSize="large" />
+                </IconButton>
+              </Stack>
+            </Box>
+          )}
+
+          {useNativeCamera && (
+            <Button
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              onClick={() => setUseNativeCamera(false)}
+              style={{ marginTop: "20px" }}
+            >
+              Switch to Web Camera
+            </Button>
+          )}
         </Box>
       )}
     </Box>

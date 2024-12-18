@@ -1,59 +1,58 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    padding: 20px;
-    background-color: #f9f9f9;
-  }
-  
-  .imagePreviewContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .imagePreview {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    margin: 20px 0;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .cameraView {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-  }
-  
-  .webcam {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    margin-bottom: 20px;
-  }
-  
-  .fileInput {
-    display: none;
-  }
-  
-  .buttonContainer {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  button {
-    text-transform: none;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.imagePreviewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.imagePreview {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cameraView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+}
+
+.webcam {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 400px;
+}
+
+button {
+  text-transform: none;
+}
