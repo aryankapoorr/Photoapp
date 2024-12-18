@@ -1,0 +1,58 @@
+.landing-page {
+    position: relative;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    padding: 20px !important;
+  }
+  
+  /* Hamburger Icon (Menu) */
+  .menu-icon {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 10 !important;
+  }
+  
+  /* Floating Camera Icon (Add Photo) */
+  .floating-camera-icon {
+    position: fixed !important;
+    bottom: 20px !important;  /* 20px from the bottom */
+    right: 20px !important;   /* 20px from the right */
+    z-index: 15 !important;
+    background-color: #007BFF !important; /* Blue color for visibility */
+    color: white !important;
+    padding: 12px !important; /* Extra padding for better click area */
+    border-radius: 50% !important; /* Round shape */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3) !important; /* Shadow for visibility */
+    transition: transform 0.3s ease-in-out !important; /* Smooth transition for hover */
+  }
+  
+  .floating-camera-icon:hover {
+    transform: scale(1.1) !important; /* Slightly enlarge on hover */
+  }
+  
+  /* Drawer Styling */
+  .MuiDrawer-paper {
+    width: 100% !important;  /* Full width */
+    height: 100vh !important; /* Full screen height */
+    background-color: #333 !important;
+  }
+  
+  .MuiListItemText-primary {
+    color: white !important;
+  }
+  
+  .MuiListItem:hover {
+    background-color: #007BFF !important;
+  }
+  
+  /* Close Button at Bottom Center */
+  .close-btn {
+    position: absolute !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    color: red !important; /* Make the close icon red for better visibility */
+    z-index: 20 !important;
+  }
+  

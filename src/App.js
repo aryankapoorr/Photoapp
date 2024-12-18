@@ -1,12 +1,16 @@
-import './App.css';
-import CameraComponent from './components/CameraComponent';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LandingPage from './components/LandingPage'; // Updated path
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <CameraComponent />;
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        {/* Add more routes here as the app expands */}
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
