@@ -1,0 +1,45 @@
+.header {
+    position: fixed !important; /* Fix the header to the top */
+    top: 0 !important; /* Stick it to the very top */
+    left: 0 !important; /* Ensure it stretches across the width */
+    right: 0 !important; /* Full width */
+    padding: 0 20px !important; /* Adjusted padding to avoid excess space */
+    display: flex !important; /* Flexbox for layout */
+    justify-content: flex-end !important; /* Align hamburger icon to the right */
+    align-items: center !important; /* Center vertically */
+    height: 40px !important; /* Set a height for the header */
+    z-index: 1000 !important; /* Ensure the header stays on top of other content */
+  }
+  
+  .menu-icon {
+    z-index: 10 !important;
+    font-size: 20px !important; /* Adjusted icon size */
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+  
+  /* Drawer Styling */
+  .MuiDrawer-paper {
+    width: 100% !important;  /* Full width */
+    height: 100vh !important; /* Full screen height */
+    background-color: #333 !important;
+  }
+  
+  .MuiListItemText-primary {
+    color: white !important;
+  }
+  
+  .MuiListItem:hover {
+    background-color: #007BFF !important;
+  }
+  
+  /* Close Button at Bottom Center */
+  .close-btn {
+    position: absolute !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    color: red !important; /* Make the close icon red for better visibility */
+    z-index: 20 !important;
+  }
+  
