@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
-import { Button, Box, IconButton, Stack } from "@mui/material";
+import { Button, Box, IconButton } from "@mui/material";
 import { CameraAlt, Loop } from "@mui/icons-material";
 import "./styles.css";
 
@@ -52,15 +52,15 @@ const CameraComponent = () => {
           </Button>
         </Box>
       ) : (
-        <Box>
+        <Box className="cameraView">
+          {/* "Upload File" button in the top-left */}
           <Button
-            variant="contained"
-            className="pastelButton"
+            variant="outlined"
+            className="uploadButton"
             onClick={() => document.getElementById("file-input").click()}
           >
-            Choose File
+            upload file
           </Button>
-
           <input
             type="file"
             id="file-input"
@@ -69,43 +69,27 @@ const CameraComponent = () => {
             onChange={handleNativeFileChange}
           />
 
-          {!useNativeCamera && (
-            <Box className="cameraView">
-              <Webcam
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
-                className="webcam"
-              />
-              <Stack direction="row" spacing={2} className="buttonContainer">
-                <IconButton
-                  className="iconButton"
-                  onClick={handleSwitchCamera}
-                >
-                  <Loop className="icon" />
-                </IconButton>
-                <IconButton
-                  className="iconButton primaryIcon"
-                  onClick={handleInAppCapture}
-                >
-                  <CameraAlt className="icon" />
-                </IconButton>
-              </Stack>
-            </Box>
-          )}
+          {/* Flip camera icon in the top-right */}
+          <IconButton className="flipCameraButton" onClick={handleSwitchCamera}>
+            <Loop className="icon" />
+          </IconButton>
 
-          {useNativeCamera && (
-            <Button
-              variant="outlined"
-              className="pastelButtonOutline"
-              fullWidth
-              onClick={() => setUseNativeCamera(false)}
-              style={{ marginTop: "20px" }}
-            >
-              Switch to Web Camera
-            </Button>
-          )}
+          {/* Webcam frame */}
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={videoConstraints}
+            className="webcam"
+          />
+
+          {/* Camera icon centered below the frame */}
+          <IconButton
+            className="captureButton primaryIcon"
+            onClick={handleInAppCapture}
+          >
+            <CameraAlt className="icon" />
+          </IconButton>
         </Box>
       )}
     </Box>
