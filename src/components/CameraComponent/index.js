@@ -1,11 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import { Button, Box, IconButton } from "@mui/material";
 import { CameraAlt, Loop } from "@mui/icons-material";
 import "./styles.css";
 
 const CameraComponent = () => {
-  const [useNativeCamera, setUseNativeCamera] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [cameraFacingMode, setCameraFacingMode] = useState("environment");
   const webcamRef = useRef(null);
