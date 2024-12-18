@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import { Button, Box, IconButton, Stack } from "@mui/material";
-import { PhotoCamera, FlipCameraAndroid } from "@mui/icons-material";
+import { CameraAlt, Loop } from "@mui/icons-material";
 import "./styles.css";
 
 const CameraComponent = () => {
@@ -44,7 +44,7 @@ const CameraComponent = () => {
           <img src={imageSrc} alt="Captured" className="imagePreview" />
           <Button
             variant="contained"
-            color="primary"
+            className="pastelButton"
             fullWidth
             onClick={() => setImageSrc(null)}
           >
@@ -53,9 +53,9 @@ const CameraComponent = () => {
         </Box>
       ) : (
         <Box>
-          {/* Single button for file input */}
           <Button
             variant="contained"
+            className="pastelButton"
             onClick={() => document.getElementById("file-input").click()}
           >
             Choose File
@@ -80,18 +80,16 @@ const CameraComponent = () => {
               />
               <Stack direction="row" spacing={2} className="buttonContainer">
                 <IconButton
-                  color="secondary"
+                  className="iconButton"
                   onClick={handleSwitchCamera}
-                  className="switchButton"
                 >
-                  <FlipCameraAndroid fontSize="large" />
+                  <Loop className="icon" />
                 </IconButton>
                 <IconButton
-                  color="primary"
+                  className="iconButton primaryIcon"
                   onClick={handleInAppCapture}
-                  className="captureButton"
                 >
-                  <PhotoCamera fontSize="large" />
+                  <CameraAlt className="icon" />
                 </IconButton>
               </Stack>
             </Box>
@@ -100,7 +98,7 @@ const CameraComponent = () => {
           {useNativeCamera && (
             <Button
               variant="outlined"
-              color="secondary"
+              className="pastelButtonOutline"
               fullWidth
               onClick={() => setUseNativeCamera(false)}
               style={{ marginTop: "20px" }}
