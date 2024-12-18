@@ -58,6 +58,7 @@
   border: 2px solid #6a1b9a !important;
   background-color: #f5d6eb !important;
   transition: background-color 0.3s ease, color 0.3s ease !important;
+  z-index: 10 !important;  /* Ensure button is clickable on all devices */
 }
 
 .uploadButton:hover {
@@ -75,6 +76,7 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
   padding: 8px !important;
   transition: transform 0.2s ease, background-color 0.3s ease !important;
+  z-index: 10 !important;  /* Ensure button is clickable on all devices */
 }
 
 .flipCameraButton:hover {
