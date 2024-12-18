@@ -1,45 +1,93 @@
+/* Header Styling */
 .header {
-    position: fixed !important; /* Fix the header to the top */
-    top: 0 !important; /* Stick it to the very top */
-    left: 0 !important; /* Ensure it stretches across the width */
-    right: 0 !important; /* Full width */
-    padding: 0 20px !important; /* Adjusted padding to avoid excess space */
-    display: flex !important; /* Flexbox for layout */
-    justify-content: flex-end !important; /* Align hamburger icon to the right */
-    align-items: center !important; /* Center vertically */
-    height: 40px !important; /* Set a height for the header */
-    z-index: 1000 !important; /* Ensure the header stays on top of other content */
-  }
-  
-  .menu-icon {
-    z-index: 10 !important;
-    font-size: 20px !important; /* Adjusted icon size */
-    display: inline-block !important;
-    vertical-align: middle !important;
-  }
-  
-  /* Drawer Styling */
-  .MuiDrawer-paper {
-    width: 100% !important;  /* Full width */
-    height: 100vh !important; /* Full screen height */
-    background-color: #333 !important;
-  }
-  
-  .MuiListItemText-primary {
-    color: white !important;
-  }
-  
-  .MuiListItem:hover {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding: 0 20px !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    height: 40px !important;
+    z-index: 1000 !important;
+    background-color: #C1BAA1 !important; /* Updated header background color */
+    border-bottom: 1px solid #ddd !important;
+}
+
+.menu-icon {
+    position: absolute !important;
+    top: 50% !important;
+    right: 60px !important; /* Slight adjustment for the upload button */
+    transform: translateY(-50%) !important;
+    z-index: 1100 !important;
+    font-size: 24px !important;
+    color: black !important; /* Text color updated to black */
+    cursor: pointer !important;
+}
+
+.upload-btn {
+    margin-right: 20px !important;
+    font-size: 16px !important;
+    padding: 6px 12px !important;
+    background-color: #C1BAA1 !important; /* Updated button background color */
+    border-radius: 20px !important;
+    color: black !important; /* Text color updated to black */
+    display: flex !important;
+    align-items: center !important;
+}
+
+.upload-btn:hover {
+    background-color: #b0a98b !important; /* Slightly darker on hover */
+}
+
+/* Drawer Styling */
+.MuiDrawer-paper {
+    width: 100% !important;
+    height: 100vh !important;
+    background-color: #C1BAA1 !important; /* Updated drawer background color */
+    color: #C1BAA1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+/* List Item Styling */
+.MuiListItem {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 120px !important;
+    margin: 20px 0 !important;
+    border-radius: 30px !important;
+    transition: background-color 0.3s ease !important;
+    width: 90% !important;
+}
+
+/* Hover Effect */
+.MuiListItem:hover {
     background-color: #007BFF !important;
-  }
-  
-  /* Close Button at Bottom Center */
-  .close-btn {
+}
+
+/* Text Styling */
+.MuiListItemText-primary {
+    font-size: 36px !important;
+    color: black !important; /* Text color updated to black */
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+/* Close Button at Bottom Center */
+.close-btn {
     position: absolute !important;
     bottom: 20px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    color: red !important; /* Make the close icon red for better visibility */
+    color: red !important;
     z-index: 20 !important;
-  }
-  
+}
+
+/* Body Container Padding */
+.body-container {
+    padding-top: 40px !important;
+    box-sizing: border-box !important;
+}

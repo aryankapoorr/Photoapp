@@ -1,20 +1,22 @@
+// src/App.js
 import React from 'react';
+import Header from './components/Header';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';  // Import Header
-import LandingPage from './components/LandingPage';  // Your landing page component
-import './App.css';
+import Login from './components/Login';
+import LandingPage from './components/LandingPage';
 
-const App = () => {
+function App() {
   return (
     <Router>
-      <Header />  {/* This will appear on every page */}
-
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        {/* Add more routes as you build other components */}
-      </Routes>
+      <Header />
+      <div className="body-container">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<LandingPage />} />
+        </Routes>
+      </div>
     </Router>
   );
-};
+}
 
 export default App;

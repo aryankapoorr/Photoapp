@@ -1,7 +1,10 @@
+// src/components/Header.js
 import React, { useState } from 'react';
 import { IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/joy';  // Import Joy UI Button
 import './styles.css';
 
 const Header = () => {
@@ -11,8 +14,23 @@ const Header = () => {
     setDrawerOpen(open);
   };
 
+  const handleUploadClick = () => {
+    document.getElementById("file-input").click();
+  };
+
   return (
     <div className="header">
+      {/* Upload Photos Button (Joy UI) */}
+      <Button
+        variant="soft"
+        color="primary"
+        onClick={handleUploadClick}
+        className="upload-btn"
+      >
+        upload photos
+      </Button>
+
+      {/* Hamburger Menu Icon */}
       <IconButton
         edge="start"
         color="inherit"
@@ -30,14 +48,18 @@ const Header = () => {
         variant="temporary"
       >
         <List>
+          {/* New Home Option */}
           <ListItem button onClick={() => toggleDrawer(false)}>
-            <ListItemText primary="Option 1" />
+            <Link to="/">
+              <ListItemText primary="Home" />
+            </Link>
           </ListItem>
+
+          {/* Login Option */}
           <ListItem button onClick={() => toggleDrawer(false)}>
-            <ListItemText primary="Option 2" />
-          </ListItem>
-          <ListItem button onClick={() => toggleDrawer(false)}>
-            <ListItemText primary="Option 3" />
+            <Link to="/login">
+              <ListItemText primary="Login" />
+            </Link>
           </ListItem>
         </List>
 
@@ -51,6 +73,14 @@ const Header = () => {
           <CloseIcon />
         </IconButton>
       </Drawer>
+
+      {/* Hidden file input */}
+      <input
+        type="file"
+        id="file-input"
+        style={{ display: 'none' }}
+        accept="image/*"
+      />
     </div>
   );
 };
