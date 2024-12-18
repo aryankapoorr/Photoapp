@@ -3,11 +3,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 100vh; /* Full viewport height */
   padding: 20px;
   background-color: #fefefe;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: #333;
+  box-sizing: border-box;
+  padding-top: 12vh; /* Increase space at the top for mobile URL bar */
+  padding-bottom: 12vh; /* Increase space at the bottom for mobile footer */
 }
 
 .imagePreviewContainer {
@@ -35,15 +38,27 @@
   position: relative;
   width: 100%;
   max-width: 400px;
+  margin-top: 20px;
+}
+
+.webcamFrame {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 640px; /* Maintain portrait aspect ratio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eaeaea; /* Light grey background for the frame */
+  border-radius: 12px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .webcam {
   width: 100% !important;
-  max-width: 400px !important;
-  height: auto !important;
+  height: 100% !important;
+  object-fit: cover !important; /* Ensure webcam fills the container */
   border-radius: 12px !important;
-  overflow: hidden !important;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 .uploadButton {
@@ -100,6 +115,10 @@
 
 .icon {
   font-size: 36px !important;
+}
+
+.smallIcon {
+  font-size: 24px !important;  /* Make icons smaller */
 }
 
 button {

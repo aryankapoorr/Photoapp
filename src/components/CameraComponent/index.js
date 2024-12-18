@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import { Button, Box, IconButton } from "@mui/material";
 import { CameraAlt, Loop } from "@mui/icons-material";
@@ -10,13 +10,19 @@ const CameraComponent = () => {
   const [cameraFacingMode, setCameraFacingMode] = useState("environment");
   const webcamRef = useRef(null);
 
+  // Define the video constraints to force portrait mode
   const videoConstraints = {
     facingMode: cameraFacingMode,
+    width: 480, // Portrait width
+    height: 640, // Portrait height
   };
 
   // Handle in-app camera capture
   const handleInAppCapture = () => {
+    // Get the screenshot from the webcam
     const image = webcamRef.current.getScreenshot();
+    
+    // If the image was captured, save it
     setImageSrc(image);
   };
 
@@ -71,24 +77,26 @@ const CameraComponent = () => {
 
           {/* Flip camera icon in the top-right */}
           <IconButton className="flipCameraButton" onClick={handleSwitchCamera}>
-            <Loop className="icon" />
+            <Loop className="icon smallIcon" />
           </IconButton>
 
-          {/* Webcam frame */}
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-            className="webcam"
-          />
+          {/* Fixed Webcam frame container */}
+          <div className="webcamFrame">
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+              className="webcam"
+            />
+          </div>
 
           {/* Camera icon centered below the frame */}
           <IconButton
             className="captureButton primaryIcon"
             onClick={handleInAppCapture}
           >
-            <CameraAlt className="icon" />
+            <CameraAlt className="icon smallIcon" />
           </IconButton>
         </Box>
       )}
