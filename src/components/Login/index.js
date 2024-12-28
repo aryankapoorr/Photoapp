@@ -21,6 +21,9 @@ const Login = () => {
   const [name, setName] = useState('');
   const [currentUserId, setCurrentUserId] = useState('');
 
+  // Regular expression for email validation
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
   const handleNameSubmit = async () => {
     try {
       if (currentUserId && name) {
@@ -39,6 +42,12 @@ const Login = () => {
   const handleRegister = async () => {
     if (!email) {
       setMessage('Please enter your email.');
+      return;
+    }
+
+    // Validate email format
+    if (!emailRegex.test(email)) {
+      setMessage('Please enter a valid email address.');
       return;
     }
 

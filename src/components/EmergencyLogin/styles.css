@@ -1,0 +1,37 @@
+/* Add this to styles.css */
+.emergency-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .emergency-login-card {
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .emergency-login-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .emergency-login-subheader {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .emergency-login-input {
+    margin-bottom: 15px;
+  }
+  
+  .emergency-login-button {
+    margin-top: 10px;
+  }
+  
+  .emergency-login-message {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
