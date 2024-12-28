@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Input, Button, Typography, Box, Card } from '@mui/joy';
-import { auth } from '../../firebase'; // Import Firebase auth from firebase.js
-import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth'; // Import necessary Firebase methods
+import { auth, engagementPhotosDb } from '../../firebase'; // Ensure engagementPhotosDb is imported
+import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth'; // Firebase methods
+import { doc, setDoc } from 'firebase/firestore'; // Firestore methods
 import './styles.css';
 
 const Login = () => {
@@ -23,14 +24,19 @@ const Login = () => {
     try {
       // Get the Google credential using the response token
       const credential = GoogleAuthProvider.credential(response.credential);
-      
+
       // Sign in with the credential using Firebase Authentication
       const userCredential = await signInWithCredential(auth, credential);
       const user = userCredential.user;
 
-      // Optionally, you can access user info and perform any post-login actions
-      setMessage(`Hello, ${user.displayName || user.email}! Successfully signed in.`);
-      // Perform additional user actions here (e.g., update Firestore, etc.)
+      // Add user to Firestore with UID as the document ID in the "engagementphotos" database
+      const userRef = doc(engagementPhotosDb, "users", user.uid);
+      await setDoc(userRef, {
+        email: user.email
+      });
+
+      // Optionally, you can also log additional user data or perform more actions here
+      setMessage(`Hello, ${user.displayName || user.email}! Successfully signed in and added to Firestore.`);
     } catch (error) {
       console.error('Google Sign-In Error:', error);
       setMessage('Google Sign-In failed. Please try again.');
