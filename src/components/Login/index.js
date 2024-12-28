@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Input, Button, Typography, Box, Card } from '@mui/joy';
-import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'; // Import from Material-UI
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'; // Material-UI imports
 import { auth, engagementPhotosDb } from '../../firebase';
 import {
-  signInWithEmailAndPassword,
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
   createUserWithEmailAndPassword,
   signInWithCredential,
   GoogleAuthProvider,
@@ -41,44 +43,36 @@ const Login = () => {
     }
 
     try {
-      // Static password for email login
+      // Static password for email registration (not used for existing users)
       const password = 'password';
 
-      // Attempt to create a new user in Firebase Authentication
+      // Attempt to create a new user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       // Add the user to Firestore with UID as the document ID
-      const userRef = doc(engagementPhotosDb, 'users', user.uid);
-      await setDoc(userRef, { email: user.email });
+      await setDoc(doc(engagementPhotosDb, 'users', user.uid), { email: user.email });
 
       setMessage('User successfully registered! Please enter your name.');
       setCurrentUserId(user.uid);
-      setNamePromptOpen(true); // Open the name prompt
+      setNamePromptOpen(true);
     } catch (error) {
-      // If the user already exists, attempt to log them in
       if (error.code === 'auth/email-already-in-use') {
+        // If email already exists, send passwordless email link
         try {
-          const userCredential = await signInWithEmailAndPassword(auth, email, 'password');
-          const user = userCredential.user;
-
-          // Check if the user has a name field in Firestore
-          const userRef = doc(engagementPhotosDb, 'users', user.uid);
-          const userDoc = await getDoc(userRef);
-
-          if (userDoc.exists() && !userDoc.data().name) {
-            setMessage('Welcome back! Please enter your name.');
-            setCurrentUserId(user.uid);
-            setNamePromptOpen(true); // Open the name prompt
-          } else {
-            setMessage(`Welcome back, ${userDoc.data().name || user.email}!`);
-          }
-        } catch (loginError) {
-          console.error('Login error:', loginError);
-          setMessage('Login failed. Please try again.');
+          const actionCodeSettings = {
+            url: window.location.href,
+            handleCodeInApp: true,
+          };
+          await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+          setMessage('This email is already registered. A sign-in link has been sent to your email. Please check your inbox.');
+          window.localStorage.setItem('emailForSignIn', email); // Store email for verification
+        } catch (linkError) {
+          console.error('Error sending sign-in link:', linkError);
+          setMessage('Failed to send the sign-in link. Please try again.');
         }
       } else {
-        console.error('Registration error:', error);
+        console.error('Error during email registration:', error);
         setMessage('Registration failed. Please try again.');
       }
     }
@@ -97,11 +91,11 @@ const Login = () => {
         await setDoc(userRef, { email: user.email });
         setMessage('Google Sign-In successful! Please enter your name.');
         setCurrentUserId(user.uid);
-        setNamePromptOpen(true); // Open the name prompt
+        setNamePromptOpen(true);
       } else if (!userDoc.data().name) {
         setMessage('Welcome back! Please enter your name.');
         setCurrentUserId(user.uid);
-        setNamePromptOpen(true); // Open the name prompt
+        setNamePromptOpen(true);
       } else {
         setMessage(`Hello, ${userDoc.data().name || user.email}!`);
       }
@@ -116,6 +110,30 @@ const Login = () => {
     setMessage('Google Sign-In failed. Please try again.');
   };
 
+  useEffect(() => {
+    const completeSignInWithEmailLink = async () => {
+      if (isSignInWithEmailLink(auth, window.location.href)) {
+        let storedEmail = window.localStorage.getItem('emailForSignIn');
+        if (!storedEmail) {
+          storedEmail = window.prompt('Please provide your email for confirmation.');
+        }
+
+        try {
+          const userCredential = await signInWithEmailLink(auth, storedEmail, window.location.href);
+          const user = userCredential.user;
+
+          setMessage(`Welcome back, ${user.email}!`);
+          window.localStorage.removeItem('emailForSignIn');
+        } catch (error) {
+          console.error('Error completing email link sign-in:', error);
+          setMessage('Failed to sign in. Please try again.');
+        }
+      }
+    };
+
+    completeSignInWithEmailLink();
+  }, []);
+
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <Box className="login-container">
@@ -127,7 +145,6 @@ const Login = () => {
             Please enter your email to proceed or sign in with Google.
           </Typography>
 
-          {/* Email Input */}
           <Input
             type="email"
             placeholder="Enter your email"
@@ -137,14 +154,12 @@ const Login = () => {
             fullWidth
           />
 
-          {/* Message */}
           {message && (
             <Typography level="body2" className="login-message">
               {message}
             </Typography>
           )}
 
-          {/* Proceed Button */}
           <Button
             variant="solid"
             color="primary"
@@ -155,7 +170,6 @@ const Login = () => {
             Proceed
           </Button>
 
-          {/* Google Sign-In Button */}
           <div className="google-login-wrapper">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
@@ -166,7 +180,6 @@ const Login = () => {
           </div>
         </Card>
 
-        {/* Name Prompt Dialog */}
         <Dialog open={namePromptOpen} onClose={() => setNamePromptOpen(false)}>
           <DialogTitle>Enter Your Name</DialogTitle>
           <DialogContent>
