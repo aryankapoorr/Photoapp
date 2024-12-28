@@ -1,21 +1,39 @@
 import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Input, Button, Typography, Box, Card } from '@mui/joy';
-import { auth, engagementPhotosDb } from '../../firebase'; // Ensure engagementPhotosDb is imported
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'; // Import from Material-UI
+import { auth, engagementPhotosDb } from '../../firebase';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithCredential,
   GoogleAuthProvider,
-} from 'firebase/auth'; // Firebase methods
-import { doc, setDoc } from 'firebase/firestore'; // Firestore methods
+} from 'firebase/auth';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import './styles.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [namePromptOpen, setNamePromptOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [currentUserId, setCurrentUserId] = useState('');
 
-  // Email login/registration handler
+  const handleNameSubmit = async () => {
+    try {
+      if (currentUserId && name) {
+        const userRef = doc(engagementPhotosDb, 'users', currentUserId);
+        await updateDoc(userRef, { name });
+        setMessage('Your name has been saved successfully!');
+        setNamePromptOpen(false);
+        setName('');
+      }
+    } catch (error) {
+      console.error('Error saving name:', error);
+      setMessage('Failed to save your name. Please try again.');
+    }
+  };
+
   const handleRegister = async () => {
     if (!email) {
       setMessage('Please enter your email.');
@@ -32,11 +50,11 @@ const Login = () => {
 
       // Add the user to Firestore with UID as the document ID
       const userRef = doc(engagementPhotosDb, 'users', user.uid);
-      await setDoc(userRef, {
-        email: user.email,
-      });
+      await setDoc(userRef, { email: user.email });
 
-      setMessage('User successfully registered and added to Firestore!');
+      setMessage('User successfully registered! Please enter your name.');
+      setCurrentUserId(user.uid);
+      setNamePromptOpen(true); // Open the name prompt
     } catch (error) {
       // If the user already exists, attempt to log them in
       if (error.code === 'auth/email-already-in-use') {
@@ -44,7 +62,17 @@ const Login = () => {
           const userCredential = await signInWithEmailAndPassword(auth, email, 'password');
           const user = userCredential.user;
 
-          setMessage(`Welcome back, ${user.email}!`);
+          // Check if the user has a name field in Firestore
+          const userRef = doc(engagementPhotosDb, 'users', user.uid);
+          const userDoc = await getDoc(userRef);
+
+          if (userDoc.exists() && !userDoc.data().name) {
+            setMessage('Welcome back! Please enter your name.');
+            setCurrentUserId(user.uid);
+            setNamePromptOpen(true); // Open the name prompt
+          } else {
+            setMessage(`Welcome back, ${userDoc.data().name || user.email}!`);
+          }
         } catch (loginError) {
           console.error('Login error:', loginError);
           setMessage('Login failed. Please try again.');
@@ -56,30 +84,33 @@ const Login = () => {
     }
   };
 
-  // Google Sign-In Success Handler
   const handleGoogleSuccess = async (response) => {
     try {
-      // Get the Google credential using the response token
       const credential = GoogleAuthProvider.credential(response.credential);
-
-      // Sign in with the credential using Firebase Authentication
       const userCredential = await signInWithCredential(auth, credential);
       const user = userCredential.user;
 
-      // Add user to Firestore with UID as the document ID in the "engagementphotos" database
       const userRef = doc(engagementPhotosDb, 'users', user.uid);
-      await setDoc(userRef, {
-        email: user.email,
-      });
+      const userDoc = await getDoc(userRef);
 
-      setMessage(`Hello, ${user.displayName || user.email}! Successfully signed in and added to Firestore.`);
+      if (!userDoc.exists()) {
+        await setDoc(userRef, { email: user.email });
+        setMessage('Google Sign-In successful! Please enter your name.');
+        setCurrentUserId(user.uid);
+        setNamePromptOpen(true); // Open the name prompt
+      } else if (!userDoc.data().name) {
+        setMessage('Welcome back! Please enter your name.');
+        setCurrentUserId(user.uid);
+        setNamePromptOpen(true); // Open the name prompt
+      } else {
+        setMessage(`Hello, ${userDoc.data().name || user.email}!`);
+      }
     } catch (error) {
       console.error('Google Sign-In Error:', error);
       setMessage('Google Sign-In failed. Please try again.');
     }
   };
 
-  // Google Sign-In Failure Handler
   const handleGoogleFailure = (error) => {
     console.error('Google Sign-In Failed:', error);
     setMessage('Google Sign-In failed. Please try again.');
@@ -134,6 +165,25 @@ const Login = () => {
             />
           </div>
         </Card>
+
+        {/* Name Prompt Dialog */}
+        <Dialog open={namePromptOpen} onClose={() => setNamePromptOpen(false)}>
+          <DialogTitle>Enter Your Name</DialogTitle>
+          <DialogContent>
+            <Input
+              type="text"
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleNameSubmit} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </GoogleOAuthProvider>
   );
