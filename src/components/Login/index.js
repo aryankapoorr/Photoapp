@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Input, Button, Typography, Box, Card } from '@mui/joy';
 import { auth, engagementPhotosDb } from '../../firebase'; // Ensure engagementPhotosDb is imported
-import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth'; // Firebase methods
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithCredential,
+  GoogleAuthProvider,
+} from 'firebase/auth'; // Firebase methods
 import { doc, setDoc } from 'firebase/firestore'; // Firestore methods
 import './styles.css';
 
@@ -10,13 +15,45 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleRegister = () => {
+  // Email login/registration handler
+  const handleRegister = async () => {
     if (!email) {
       setMessage('Please enter your email.');
       return;
     }
 
-    setMessage('Registration flow triggered.'); // Placeholder action
+    try {
+      // Static password for email login
+      const password = 'password';
+
+      // Attempt to create a new user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Add the user to Firestore with UID as the document ID
+      const userRef = doc(engagementPhotosDb, 'users', user.uid);
+      await setDoc(userRef, {
+        email: user.email,
+      });
+
+      setMessage('User successfully registered and added to Firestore!');
+    } catch (error) {
+      // If the user already exists, attempt to log them in
+      if (error.code === 'auth/email-already-in-use') {
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, 'password');
+          const user = userCredential.user;
+
+          setMessage(`Welcome back, ${user.email}!`);
+        } catch (loginError) {
+          console.error('Login error:', loginError);
+          setMessage('Login failed. Please try again.');
+        }
+      } else {
+        console.error('Registration error:', error);
+        setMessage('Registration failed. Please try again.');
+      }
+    }
   };
 
   // Google Sign-In Success Handler
@@ -30,12 +67,11 @@ const Login = () => {
       const user = userCredential.user;
 
       // Add user to Firestore with UID as the document ID in the "engagementphotos" database
-      const userRef = doc(engagementPhotosDb, "users", user.uid);
+      const userRef = doc(engagementPhotosDb, 'users', user.uid);
       await setDoc(userRef, {
-        email: user.email
+        email: user.email,
       });
 
-      // Optionally, you can also log additional user data or perform more actions here
       setMessage(`Hello, ${user.displayName || user.email}! Successfully signed in and added to Firestore.`);
     } catch (error) {
       console.error('Google Sign-In Error:', error);
