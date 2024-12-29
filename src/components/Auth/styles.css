@@ -1,0 +1,52 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+  }
+  
+  .login-card {
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-header {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold !important;
+  }
+  
+  .login-subheader {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .login-input {
+    margin-bottom: 1rem !important;
+  }
+  
+  .login-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .login-button {
+    margin-bottom: 1.5rem;
+  }
+  
+  .google-login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .google-login-button {
+    width: 100% !important; /* Ensures the button takes up full width */
+    max-width: 400px; /* Optional: limits the max width */
+  }
+  

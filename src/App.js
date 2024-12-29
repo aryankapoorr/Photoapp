@@ -1,24 +1,33 @@
-// src/App.js
-import React from 'react';
-import Header from './components/Header';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { auth } from './firebase';
+import Auth from './components/Auth';
 import LandingPage from './components/LandingPage';
+import Header from './components/Header';
 import EmergencyLogin from './components/EmergencyLogin';
+import './App.css';
 
-function App() {
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(!!user); // Set logged-in state based on authentication
+    });
+
+    return () => unsubscribe(); // Clean up listener on unmount
+  }, []);
+
   return (
     <Router>
-      <Header />
-      <div className="body-container">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/emergencylogin" element={<EmergencyLogin />} />
-        </Routes>
-      </div>
+      {isLoggedIn && <Header />} {/* Show Header only when user is logged in */}
+      <Routes>
+        <Route path="/" element={!isLoggedIn ? <Auth /> : <LandingPage />} />
+        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/emergencylogin" element={<EmergencyLogin />} />
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;
