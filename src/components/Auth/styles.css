@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f7f7f7;
+    background-color: #EDDFE0;
   }
   
   .login-card {
@@ -36,6 +36,7 @@
   
   .login-button {
     margin-bottom: 1.5rem;
+    background-color: #705C53 !important;
   }
   
   .google-login-wrapper {

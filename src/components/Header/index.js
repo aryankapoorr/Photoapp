@@ -96,10 +96,11 @@ const Header = () => {
           edge="start"
           color="inherit"
           aria-label="close"
+          size="large"
           onClick={() => toggleDrawer(false)}
           className="close-btn"
         >
-          <CloseIcon />
+          <CloseIcon fontSize='inherit'/>
         </IconButton>
       </Drawer>
 

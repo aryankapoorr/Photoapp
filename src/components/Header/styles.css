@@ -10,7 +10,7 @@
     align-items: center !important;
     height: 40px !important;
     z-index: 1000 !important;
-    background-color: #C1BAA1 !important; /* Updated header background color */
+    background-color: #EDDFE0 !important; /* Updated header background color */
     border-bottom: 1px solid #ddd !important;
 }
 
@@ -44,8 +44,8 @@
 .MuiDrawer-paper {
     width: 100% !important;
     height: 100vh !important;
-    background-color: #C1BAA1 !important; /* Updated drawer background color */
-    color: #C1BAA1 !important;
+    background-color: #EDDFE0 !important; /* Updated drawer background color */
+    color: #EDDFE0 !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -82,7 +82,7 @@
     bottom: 20px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    color: red !important;
+    color: black !important;
     z-index: 20 !important;
 }
 
