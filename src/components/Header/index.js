@@ -80,6 +80,12 @@ const Header = () => {
             </Link>
           </ListItem>
 
+          <ListItem button onClick={() => toggleDrawer(false)}>
+            <Link to="/myphotos">
+              <ListItemText primary="My Photos" />
+            </Link>
+          </ListItem>
+
           {/* Logout Option */}
           <ListItem button onClick={() => setLogoutDialogOpen(true)}>
             <ListItemText primary="Logout" />

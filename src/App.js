@@ -5,6 +5,7 @@ import Auth from './components/Auth';
 import LandingPage from './components/LandingPage';
 import Header from './components/Header';
 import EmergencyLogin from './components/EmergencyLogin';
+import MyPhotos from './components/MyPhotos';
 import './App.css';
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/" element={!isLoggedIn ? <Auth /> : <LandingPage />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/emergencylogin" element={<EmergencyLogin />} />
+        <Route path="/myphotos" element={<MyPhotos />} />
       </Routes>
     </Router>
   );
