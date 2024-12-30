@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Box, Input, Button, Typography, Card } from '@mui/joy';
 import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
 const EmergencyLogin = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if the user is logged in

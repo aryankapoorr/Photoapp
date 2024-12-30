@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, IconButton, Grid, Typography } from '@mui/material';
+import { Box, IconButton, Grid, Typography } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
-import { getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { auth, engagementPhotosDb } from '../../firebase';
 
@@ -72,7 +72,7 @@ const MyPhotos = () => {
           {photos.map((photo) => (
             <Grid item xs={12} sm={6} md={4} key={photo.id}>
               <Box position="relative">
-                <img src={photo.url} alt="User Photo" style={{ width: '100%', height: 'auto' }} />
+                <img src={photo.url} alt="User" style={{ width: '100%', height: 'auto' }} />
                 <IconButton
                   color="secondary"
                   onClick={() => handleDeletePhoto(photo.id, photo.url)}

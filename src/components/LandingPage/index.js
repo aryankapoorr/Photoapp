@@ -9,7 +9,6 @@ import './styles.css';
 const LandingPage = () => {
   const [photo, setPhoto] = useState(null); // State to hold the captured photo
   const [openDialog, setOpenDialog] = useState(false); // Dialog for retake/upload prompt
-  const [userId, setUserId] = useState(''); // Assume the user's ID is available
   const fileInputRef = React.createRef(); // Reference to the hidden file input
 
   const handleAddPhotoClick = () => {

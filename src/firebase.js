@@ -1,7 +1,7 @@
 // firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; // Make sure to import firestore methods
+import { getFirestore } from "firebase/firestore"; // Make sure to import firestore methods
 
 // Your Firebase configuration object
 const firebaseConfig = {
