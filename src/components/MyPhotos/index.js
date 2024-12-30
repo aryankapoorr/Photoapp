@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton, Grid, Typography } from '@mui/material';
-import { Delete as DeleteIcon } from '@mui/icons-material';
+import { Box, Grid, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { auth, engagementPhotosDb } from '../../firebase';
@@ -8,6 +7,8 @@ import { auth, engagementPhotosDb } from '../../firebase';
 const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [photoToDelete, setPhotoToDelete] = useState(null);
 
   const userId = auth.currentUser?.uid;
 
@@ -37,11 +38,13 @@ const MyPhotos = () => {
     fetchPhotos();
   }, [userId]);
 
-  const handleDeletePhoto = async (photoId, photoUrl) => {
+  const handleDeletePhoto = async () => {
+    if (!photoToDelete) return;
+
     try {
       // Deleting photo from Firebase Storage
       const storage = getStorage();
-      const photoRef = ref(storage, `engagementpartyphotos/${photoId}.png`);
+      const photoRef = ref(storage, `engagementpartyphotos/${photoToDelete.id}.png`);
       await deleteObject(photoRef);
 
       // Deleting photo from Firestore photos array
@@ -49,13 +52,26 @@ const MyPhotos = () => {
       const userDoc = await getDoc(userRef);
 
       if (userDoc.exists()) {
-        const updatedPhotos = userDoc.data().photos.filter(photo => photo.id !== photoId);
+        const updatedPhotos = userDoc.data().photos.filter(photo => photo.id !== photoToDelete.id);
         await updateDoc(userRef, { photos: updatedPhotos });
         setPhotos(updatedPhotos);
       }
     } catch (error) {
       console.error('Error deleting photo:', error);
+    } finally {
+      setDeleteDialogOpen(false);
+      setPhotoToDelete(null);
     }
+  };
+
+  const openDeleteDialog = (photo) => {
+    setPhotoToDelete(photo);
+    setDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setPhotoToDelete(null);
   };
 
   if (loading) {
@@ -63,33 +79,48 @@ const MyPhotos = () => {
   }
 
   return (
-    <Box>
-      <Typography variant="h4">My Photos</Typography>
+    <Box className="my-photos-container" style={{ marginTop: '64px' }}> {/* Added marginTop */}
       {photos.length === 0 ? (
-        <Typography>No photos available</Typography>
+        <Typography className="no-photos">No photos available</Typography>
       ) : (
-        <Grid container spacing={2}>
+        <Grid container className="photo-grid">
           {photos.map((photo) => (
-            <Grid item xs={12} sm={6} md={4} key={photo.id}>
-              <Box position="relative">
-                <img src={photo.url} alt="User" style={{ width: '100%', height: 'auto' }} />
-                <IconButton
-                  color="secondary"
-                  onClick={() => handleDeletePhoto(photo.id, photo.url)}
-                  style={{
-                    position: 'absolute',
-                    top: 10,
-                    right: 10,
-                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
+            <Grid item xs={12} sm={6} md={4} key={photo.id} className="photo-item">
+              <img src={photo.url} alt="User" className="photo-img" />
+              <Button
+                onClick={() => openDeleteDialog(photo)}
+                className="delete-button"
+                style={{ color: 'red', textTransform: 'none' }}
+              >
+                Delete
+              </Button>
             </Grid>
           ))}
         </Grid>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={closeDeleteDialog}
+        aria-labelledby="delete-photo-dialog-title"
+        aria-describedby="delete-photo-dialog-description"
+      >
+        <DialogTitle id="delete-photo-dialog-title">Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography id="delete-photo-dialog-description">
+            Are you sure you want to delete this photo? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeletePhoto} color="secondary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

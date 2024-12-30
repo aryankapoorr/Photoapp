@@ -1,0 +1,97 @@
+/* MyPhotos Component Styling */
+.my-photos-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+  }
+  
+  .my-photos-container h4 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 10px;
+    overflow-x: hidden;
+  }
+  
+  .photo-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .photo-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    padding: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .delete-button:hover {
+    background-color: rgba(255, 0, 0, 0.7);
+  }
+  
+  .delete-button svg {
+    color: #f44336;
+    font-size: 24px;
+  }
+  
+  .no-photos {
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    margin-top: 50px;
+  }
+  
+  @media (max-width: 768px) {
+    /* Adjusting grid for smaller devices */
+    .photo-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+  
+    .my-photos-container h4 {
+      font-size: 1.5rem;
+    }
+  
+    .delete-button {
+      padding: 5px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .photo-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+  
+    .my-photos-container h4 {
+      font-size: 1.3rem;
+    }
+  
+    .delete-button {
+      padding: 4px;
+    }
+  }
+  
