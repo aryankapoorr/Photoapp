@@ -2,7 +2,7 @@
 .my-photos-container {
     background-color: #f9f9f9;
     padding: 20px;
-    margin-top: 64px; /* Account for header */
+    margin-top: 64px; /* Ensure the content is below the header */
 }
 
 .my-photos-container h4 {
@@ -14,10 +14,11 @@
 }
 
 .photo-grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Default to auto for mobile */
     gap: 16px;
     padding: 10px;
+    overflow-x: hidden;
 }
 
 .photo-item {
@@ -26,18 +27,17 @@
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
-.photo-container {
-    position: relative;
-    max-width: 100%;
-    width: 100%;
+.photo-item:hover {
+    transform: scale(1.05);
 }
 
-.photo-img {
+.photo-item img {
     width: 100%;
-    height: auto;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     border-radius: 10px;
 }
 
@@ -48,7 +48,7 @@
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 50%;
     padding: 6px;
-    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .delete-button:hover {
@@ -57,7 +57,7 @@
 
 .delete-button svg {
     color: #f44336;
-    font-size: 36px;
+    font-size: 36px; /* Larger trash icon */
 }
 
 .no-photos {
@@ -67,7 +67,26 @@
     margin-top: 50px;
 }
 
+/* For medium and smaller devices, show one photo per row */
+@media (max-width: 1024px) {
+    .photo-grid {
+        grid-template-columns: 1fr; /* One photo per row for mobile and tablet */
+    }
+
+    .my-photos-container h4 {
+        font-size: 1.6rem;
+    }
+
+    .delete-button {
+        padding: 5px;
+    }
+}
+
 @media (max-width: 768px) {
+    .photo-grid {
+        grid-template-columns: 1fr; /* One photo per row for mobile */
+    }
+
     .my-photos-container h4 {
         font-size: 1.5rem;
     }
@@ -78,11 +97,22 @@
 }
 
 @media (max-width: 480px) {
+    .photo-grid {
+        grid-template-columns: 1fr; /* One photo per row for very small devices */
+    }
+
     .my-photos-container h4 {
         font-size: 1.3rem;
     }
 
     .delete-button {
         padding: 4px;
+    }
+}
+
+/* For large screens, set 3 photos per row */
+@media (min-width: 1025px) {
+    .photo-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns per row for desktop */
     }
 }
