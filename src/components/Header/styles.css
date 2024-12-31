@@ -1,93 +1,79 @@
-/* Header Styling */
-.header {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    padding: 0 20px !important;
-    display: flex !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    height: 50px !important;
-    z-index: 1000 !important;
-    background-color: #EDDFE0 !important; /* Updated header background color */
-    border-bottom: 1px solid #ddd !important;
-}
-
-.menu-icon {
-    position: absolute !important;
-    top: 50% !important;
-    right: 60px !important; /* Slight adjustment for the upload button */
-    transform: translateY(-50%) !important;
-    z-index: 1100 !important;
-    font-size: 24px !important;
-    color: black !important; /* Text color updated to black */
-    cursor: pointer !important;
-}
-
-.upload-btn {
-    margin-right: 20px !important;
-    font-size: 16px !important;
-    padding: 6px 12px !important;
-    background-color: #C1BAA1 !important; /* Updated button background color */
-    border-radius: 20px !important;
-    color: black !important; /* Text color updated to black */
-    display: flex !important;
-    align-items: center !important;
-}
-
-.upload-btn:hover {
-    background-color: #b0a98b !important; /* Slightly darker on hover */
-}
-
-/* Drawer Styling */
-.MuiDrawer-paper {
+/* App Bar Styling */
+.MuiAppBar-root {
+    background-color: #EDDFE0 !important;
+  }
+  
+  .MuiTypography-h6 {
+    color: #705C53 !important; /* Set app bar text color to black */
+    font-weight: 600;
+  }
+  
+  /* Drawer Styling */
+  .drawer {
     width: 100% !important;
-    height: 100vh !important;
-    background-color: #EDDFE0 !important; /* Updated drawer background color */
-    color: #EDDFE0 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-}
-
-/* List Item Styling */
-.MuiListItem {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    height: 120px !important;
-    margin: 20px 0 !important;
-    border-radius: 30px !important;
-    transition: background-color 0.3s ease !important;
-    width: 90% !important;
-}
-
-/* Hover Effect */
-.MuiListItem:hover {
-    background-color: #007BFF !important;
-}
-
-/* Text Styling */
-.MuiListItemText-primary {
-    font-size: 36px !important;
-    color: black !important; /* Text color updated to black */
-    text-align: center !important;
+    max-width: 100% !important;
+  }
+  
+  .MuiDrawer-paper {
+    width: 100% !important;
+    height: 50% !important; /* Height for the top-down drawer */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the items vertically */
+    align-items: center;
+    background-color: #EDDFE0 !important;
+    position: relative;
+    margin-top: -50px !important;
+  }
+  
+  /* Close Button */
+  .close-btn {
+    position: absolute;
+    bottom: 1rem; /* Move it to the bottom */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    color: #000;
+    margin-left: 0px !important;
+    margin-bottom: -15px !important;
+  }
+  
+  /* Menu Item Styling */
+  .menu-item {
+    text-align: center;
+    width: 100% !important;
+    padding: 2rem !important; /* Increase padding for larger items */
+    font-weight: 600;
+    font-size: 1.5rem !important; /* Increase font size */
+    color: #333;
+  }
+  
+  /* Center text within each menu item */
+  .menu-item .MuiListItemText-root {
+    text-align: center;
+  }
+  
+  /* Hover effect for menu items */
+  .menu-item:hover {
+    background-color: #dcdcdc;
+  }
+  
+  /* App Bar Buttons Styling */
+  .MuiButton-root {
+    color: #705C53 !important;
+  }
+  
+  /* Icon Colors */
+  .MuiIconButton-root, .MuiListItemIcon-root {
+    color: #705C53 !important; /* Set icon color to black */
+  }
+  
+  /* Additional Styling Adjustments */
+  .MuiTypography-h6 {
+    font-weight: 600;
+  }
+  
+.list-text {
+    font-size: 25px !important;
     font-weight: bold !important;
-}
-
-/* Close Button at Bottom Center */
-.close-btn {
-    position: absolute !important;
-    bottom: 20px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    color: black !important;
-    z-index: 20 !important;
-}
-
-/* Body Container Padding */
-.body-container {
-    padding-top: 40px !important;
-    box-sizing: border-box !important;
+    color: #705C53 !important;
 }

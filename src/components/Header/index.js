@@ -1,97 +1,78 @@
-// src/components/Header.js
 import React, { useState } from 'react';
-import {
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button as MUIButton,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/joy'; // Import Joy UI Button
-import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
-import './styles.css';
+import { AppBar, Toolbar, IconButton, Button, Drawer, List, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { Menu as MenuIcon, Logout as LogoutIcon, Close as CloseIcon } from '@mui/icons-material';
+import { useNavigate, Link } from 'react-router-dom';
+import { auth } from '../../firebase'; // Import Firebase auth
+import './styles.css'; // Import the new styles.css file
 
 const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Track login state
+  const navigate = useNavigate();
 
   const toggleDrawer = (open) => {
     setDrawerOpen(open);
   };
 
-  const handleUploadClick = () => {
-    document.getElementById('file-input').click();
-  };
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      setLogoutDialogOpen(false); // Close dialog after logout
-    } catch (error) {
-      console.error('Error logging out:', error);
-      alert('Failed to log out. Please try again.');
-    }
+  const handleLogout = () => {
+    auth.signOut().then(() => {
+      setIsLoggedIn(false);
+      navigate('/');
+    });
   };
 
   return (
-    <div className="header">
-      {/* Upload Photos Button (Joy UI) */}
-      <Button
-        variant="soft"
-        color="primary"
-        onClick={handleUploadClick}
-        className="upload-btn"
-      >
-        upload photos
-      </Button>
+    <>
+      <AppBar position="sticky">
+        <Toolbar>
+          {/* Left side: Drawer (Menu) */}
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => toggleDrawer(true)}>
+            <MenuIcon />
+          </IconButton>
 
-      {/* Hamburger Menu Icon */}
-      <IconButton
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-        onClick={() => toggleDrawer(true)}
-        className="menu-icon"
-      >
-        <MenuIcon />
-      </IconButton>
+          {/* Centered Title */}
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            
+          </Typography>
 
+          {/* Right side: Logout Button */}
+          {isLoggedIn && (
+            <Button
+              color="inherit"
+              startIcon={<LogoutIcon />}
+              onClick={handleLogout}
+              sx={{ marginLeft: 'auto' }} // Move the button to the right
+            >
+              Logout
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile Drawer for Navigation (Top-down) */}
       <Drawer
         anchor="top"
         open={drawerOpen}
         onClose={() => toggleDrawer(false)}
         variant="temporary"
+        className="drawer" // Use class for custom styling
       >
         <List>
-          {/* Home Option */}
-          <ListItem button onClick={() => toggleDrawer(false)}>
-            <Link to="/">
-              <ListItemText primary="Home" />
-            </Link>
-          </ListItem>
+          {/* Menu Items */}
+          <ListItemButton onClick={() => { toggleDrawer(false); navigate('/'); }} className="menu-item">
+            <ListItemText className="list-text" primary="Home" />
+          </ListItemButton>
 
-          <ListItem button onClick={() => toggleDrawer(false)}>
-            <Link to="/myphotos">
-              <ListItemText primary="My Photos" />
-            </Link>
-          </ListItem>
+          <ListItemButton onClick={() => { toggleDrawer(false); navigate('/photos'); }} className="menu-item">
+            <ListItemText className="list-text" primary="Photo Feed" />
+          </ListItemButton>
 
-          {/* Logout Option */}
-          <ListItem button onClick={() => setLogoutDialogOpen(true)}>
-            <ListItemText primary="Logout" />
-          </ListItem>
+          <ListItemButton onClick={() => { toggleDrawer(false); navigate('/myphotos'); }} className="menu-item">
+            <ListItemText className="list-text" primary="My Photos" />
+          </ListItemButton>
         </List>
 
+        {/* Close Button at the Bottom */}
         <IconButton
           edge="start"
           color="inherit"
@@ -100,44 +81,10 @@ const Header = () => {
           onClick={() => toggleDrawer(false)}
           className="close-btn"
         >
-          <CloseIcon fontSize='inherit'/>
+          <CloseIcon />
         </IconButton>
       </Drawer>
-
-      {/* Logout Confirmation Dialog */}
-      <Dialog
-        open={logoutDialogOpen}
-        onClose={() => setLogoutDialogOpen(false)}
-        aria-labelledby="logout-dialog-title"
-        aria-describedby="logout-dialog-description"
-      >
-        <DialogTitle id="logout-dialog-title">Confirm Logout</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="logout-dialog-description">
-            Are you sure you want to log out of the application?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <MUIButton
-            onClick={() => setLogoutDialogOpen(false)}
-            color="primary"
-          >
-            Cancel
-          </MUIButton>
-          <MUIButton onClick={handleLogout} color="error">
-            Logout
-          </MUIButton>
-        </DialogActions>
-      </Dialog>
-
-      {/* Hidden file input */}
-      <input
-        type="file"
-        id="file-input"
-        style={{ display: 'none' }}
-        accept="image/*"
-      />
-    </div>
+    </>
   );
 };
 
