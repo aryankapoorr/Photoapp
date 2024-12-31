@@ -3,6 +3,8 @@ import { Box, Grid, Typography, Button, Dialog, DialogActions, DialogContent, Di
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { auth, engagementPhotosDb } from '../../firebase';
+import DeleteIcon from '@mui/icons-material/Delete';
+import "./styles.css";
 
 const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -85,15 +87,16 @@ const MyPhotos = () => {
       ) : (
         <Grid container className="photo-grid">
           {photos.map((photo) => (
-            <Grid item xs={12} sm={6} md={4} key={photo.id} className="photo-item">
-              <img src={photo.url} alt="User" className="photo-img" />
-              <Button
-                onClick={() => openDeleteDialog(photo)}
-                className="delete-button"
-                style={{ color: 'red', textTransform: 'none' }}
-              >
-                Delete
-              </Button>
+            <Grid item xs={12} key={photo.id} className="photo-item">
+              <div className="photo-container">
+                <img src={photo.url} alt="User" className="photo-img" />
+                <Button
+                  onClick={() => openDeleteDialog(photo)}
+                  className="delete-button"
+                >
+                  <DeleteIcon style={{ color: '#f44336', fontSize: '36px' }} />
+                </Button>
+              </div>
             </Grid>
           ))}
         </Grid>
