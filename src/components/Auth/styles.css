@@ -1,15 +1,17 @@
 .login-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Align the content to the top */
     align-items: center;
     height: 100vh;
     background-color: #EDDFE0;
+    flex-direction: column;
+    padding-top: 75px; /* Add some padding from the top */
   }
   
   .login-card {
     padding: 2rem;
-    max-width: 400px;
-    width: 100%;
+    width: 90%; /* Adjust the width for smaller screens */
+    max-width: 400px; /* Maximum width remains the same */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   }
   
@@ -49,5 +51,24 @@
   .google-login-button {
     width: 100% !important; /* Ensures the button takes up full width */
     max-width: 400px; /* Optional: limits the max width */
+  }
+  
+  /* Adjust the styling for the graphic and its container */
+  .graphic-container {
+    text-align: center;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .login-graphic {
+    width: 100%;
+    max-width: 300px;  /* Adjust as per the image size */
+    height: auto;
+  }
+  
+  .divider-or {
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0;
   }
   
