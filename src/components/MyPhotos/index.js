@@ -4,7 +4,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { auth, engagementPhotosDb } from '../../firebase';
 import DeleteIcon from '@mui/icons-material/Delete';
-import "./styles.css";
+import './styles.css';  // Importing the CSS file
 
 const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
