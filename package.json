@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.1.10",
     "@mui/joy": "^5.0.0-beta.51",
+    "@mui/lab": "^6.0.0-beta.21",
     "@mui/material": "^6.3.0",
     "@react-oauth/google": "^0.12.1",
     "and": "^0.0.3",
@@ -20,8 +21,12 @@
     "react-dom": "^19.0.0",
     "react-firebase-hooks": "^5.1.1",
     "react-google-login": "^5.2.2",
+    "react-image-lightbox": "^5.1.4",
+    "react-photo-album": "^3.0.2",
+    "react-photo-gallery": "^8.0.0",
     "react-router-dom": "^7.0.2",
     "react-scripts": "5.0.1",
+    "react-use": "^17.6.0",
     "react-webcam": "^7.2.0"
   },
   "scripts": {

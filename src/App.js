@@ -6,6 +6,7 @@ import LandingPage from './components/LandingPage';
 import Header from './components/Header';
 import EmergencyLogin from './components/EmergencyLogin';
 import MyPhotos from './components/MyPhotos';
+import Photos from './components/Photos';
 import './App.css';
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/emergencylogin" element={<EmergencyLogin />} />
         <Route path="/myphotos" element={<MyPhotos />} />
+        <Route path="/photos" element={<Photos />} />
       </Routes>
     </Router>
   );
