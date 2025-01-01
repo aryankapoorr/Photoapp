@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Container, CircularProgress, Tabs, Tab, Box, Pagination, Modal, IconButton } from '@mui/material';
-import { Masonry } from '@mui/lab';
+import { Container, CircularProgress, Tabs, Tab, Box, Pagination, Modal, IconButton, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import useWindowSize from './useWindowSize';
@@ -25,7 +24,7 @@ const PhotosPage = () => {
   const calculatePageSize = useCallback(() => {
     const screenHeight = window.innerHeight;
     const approxPhotoHeight = 150; // Adjust based on typical photo height
-    const columnCount = window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4; // Match Masonry columns
+    const columnCount = window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4; // Match ImageList columns
   
     const rowsPerPage = Math.floor(screenHeight / (approxPhotoHeight + 16)); 
     setPageSize(rowsPerPage * columnCount);
@@ -72,37 +71,37 @@ const PhotosPage = () => {
     return () => window.removeEventListener('resize', calculatePageSize);
   }, [height, calculatePageSize]);
 
-  // Handle tab change
-  const handleTabChange = (event, newValue) => {
+  // Memoizing tab change handler to avoid unnecessary re-renders
+  const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
     setCurrentPage(1); // Reset to the first page when the tab changes
     window.history.pushState({}, '', `?page=${currentPage}&tab=${newValue}`);
-  };
+  }, [currentPage]);
 
-  // Handle pagination change
-  const handlePageChange = (event, value) => {
+  // Memoizing page change handler to avoid unnecessary re-renders
+  const handlePageChange = useCallback((event, value) => {
     setCurrentPage(value);
     window.history.pushState({}, '', `?page=${value}&tab=${activeTab}`);
-  };
+  }, [activeTab]);
 
-  // Get the current photos based on the active tab and pagination
-  const getPaginatedPhotos = (photos) => {
+  // Memoizing the function to get paginated photos
+  const getPaginatedPhotos = useCallback((photos) => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return photos.slice(startIndex, endIndex);
-  };
+  }, [currentPage, pageSize]);
 
   // Handle photo click to expand in modal
-  const handlePhotoClick = (photoUrl) => {
+  const handlePhotoClick = useCallback((photoUrl) => {
     setSelectedPhoto(photoUrl);
     setOpenModal(true);
-  };
+  }, []);
 
   // Close the modal
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setOpenModal(false);
     setSelectedPhoto(null);
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -128,18 +127,30 @@ const PhotosPage = () => {
         </Tabs>
       </Box>
 
-      {/* Masonry Grid */}
-      <div className="photo-grid">
+      {/* Woven ImageList for Grid */}
+      <ImageList 
+        variant="woven" 
+        cols={window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4} 
+        gap={16}
+      >
         {getPaginatedPhotos(photos[activeTab === 0 ? 'engagementDay' : 'engagementParty']).map((photoUrl, index) => (
-          <img
-            key={index}
-            src={photoUrl}
-            alt={`Photo ${index}`}
-            className="photo-img"
-            onClick={() => handlePhotoClick(photoUrl)}
-          />
+          <ImageListItem key={index}>
+            <img
+              src={photoUrl}
+              alt={`Photo ${index}`}
+              className="photo-img"
+              onClick={() => handlePhotoClick(photoUrl)}
+            />
+            {/* Only add descriptions for Engagement Party Photos */}
+            {activeTab === 1 && (
+              <ImageListItemBar
+                title={`Photo ${index}`}
+                subtitle={<span>Click to expand</span>}
+              />
+            )}
+          </ImageListItem>
         ))}
-      </div>
+      </ImageList>
 
       {/* Modal for Photo Enlargement */}
       <Modal open={openModal} onClose={handleCloseModal}>
