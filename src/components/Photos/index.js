@@ -21,8 +21,12 @@ const PhotosPage = () => {
 
   useEffect(() => {
     const calculatePageSize = () => {
-      const photosPerPage = Math.floor((height * 8) / 300); // Quadruple the content
-      setPageSize(photosPerPage);
+        const screenHeight = window.innerHeight;
+        const approxPhotoHeight = 150; // Adjust based on typical photo height
+        const columnCount = window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4; // Match Masonry columns
+      
+        const rowsPerPage = Math.floor(screenHeight / (approxPhotoHeight + 16)); 
+      setPageSize(rowsPerPage * columnCount);
     };
 
     calculatePageSize();
@@ -115,7 +119,7 @@ const PhotosPage = () => {
       </Box>
 
       {/* Masonry Grid */}
-      <Masonry columns={3} spacing={2}>
+      <Masonry columns={{ xs: 2, sm: 3, md: 4 }} spacing={2}>
         {getPaginatedPhotos(photos[activeTab === 0 ? 'engagementDay' : 'engagementParty']).map((photoUrl, index) => (
           <img
             key={index}
@@ -128,7 +132,7 @@ const PhotosPage = () => {
       </Masonry>
 
       {/* Pagination */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
         <Pagination
           count={Math.ceil(
             photos[activeTab === 0 ? 'engagementDay' : 'engagementParty'].length / pageSize
@@ -136,6 +140,7 @@ const PhotosPage = () => {
           page={currentPage}
           onChange={handlePageChange}
           color="primary"
+          className='pagination'
         />
       </Box>
 
