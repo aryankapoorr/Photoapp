@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, CircularProgress, Tabs, Tab, Box, Pagination, Modal, IconButton } from '@mui/material';
+import { Container, CircularProgress, Tabs, Tab, Box, Pagination, Modal, IconButton } from '@mui/material';
 import { Masonry } from '@mui/lab';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import useWindowSize from './useWindowSize';
+import { useLocation } from 'react-router-dom';
 import './styles.css';
 
 const PhotosPage = () => {
@@ -11,7 +12,7 @@ const PhotosPage = () => {
     engagementDay: [],
     engagementParty: [],
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Track loading state for spinner
   const [activeTab, setActiveTab] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const { height } = useWindowSize();
@@ -19,19 +20,23 @@ const PhotosPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
+  const location = useLocation();
+
+  // Calculate page size dynamically based on screen height and width
   useEffect(() => {
     const calculatePageSize = () => {
-        const screenHeight = window.innerHeight;
-        const approxPhotoHeight = 150; // Adjust based on typical photo height
-        const columnCount = window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4; // Match Masonry columns
-      
-        const rowsPerPage = Math.floor(screenHeight / (approxPhotoHeight + 16)); 
+      const screenHeight = window.innerHeight;
+      const approxPhotoHeight = 150; // Adjust based on typical photo height
+      const columnCount = window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4; // Match Masonry columns
+    
+      const rowsPerPage = Math.floor(screenHeight / (approxPhotoHeight + 16)); 
       setPageSize(rowsPerPage * columnCount);
     };
 
     calculatePageSize();
     window.addEventListener('resize', calculatePageSize);
 
+    // Fetch photos from Firebase storage
     const fetchPhotos = async () => {
       try {
         const storage = getStorage();
@@ -68,42 +73,67 @@ const PhotosPage = () => {
     return () => window.removeEventListener('resize', calculatePageSize);
   }, [height]);
 
+  // Handle tab change
   const handleTabChange = (event, newValue) => {
+    setLoading(true); // Show the loading spinner when switching tabs
     setActiveTab(newValue);
     setCurrentPage(1); // Reset to the first page when the tab changes
+
+    // Update the URL with the current page number and tab
+    window.history.pushState({}, '', `?page=1&tab=${newValue}`);
+    
+    // Force the loading screen to show for 0.5 seconds
+    setTimeout(() => {
+      setLoading(false); // Hide loading spinner after 0.5 seconds
+    }, 250);
   };
 
+  // Handle pagination change
   const handlePageChange = (event, value) => {
+    setLoading(true); // Show the loading spinner when switching pages
     setCurrentPage(value);
+
+    // Update the URL with the current page number
+    window.history.pushState({}, '', `?page=${value}&tab=${activeTab}`);
+    
+    // Force the loading screen to show for 0.5 seconds
+    setTimeout(() => {
+      setLoading(false); // Hide loading spinner after 0.5 seconds
+    }, 500);
   };
 
+  // Get the current photos based on the active tab and pagination
   const getPaginatedPhotos = (photos) => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return photos.slice(startIndex, endIndex);
   };
 
+  // Handle photo click to expand in modal
   const handlePhotoClick = (photoUrl) => {
     setSelectedPhoto(photoUrl);
     setOpenModal(true);
   };
 
+  // Close the modal
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedPhoto(null);
   };
 
+  // Show loading screen if we are in the process of fetching new page/tab or photos are not loaded
   if (loading) {
     return (
       <Container>
-        <CircularProgress />
+        <Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CircularProgress sx={{ color: '#fff' }} />
+        </Box>
       </Container>
     );
   }
 
   return (
     <Container>
-
       {/* Tabs Stacked Below Header */}
       <Box sx={{ width: '100%', position: 'sticky', top: 64, zIndex: 10, backgroundColor: '#fff', borderBottom: '1px solid #ccc' }}>
         <Tabs
