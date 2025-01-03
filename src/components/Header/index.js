@@ -26,7 +26,7 @@ const Header = () => {
       <AppBar position="sticky">
         <Toolbar>
           {/* Left side: Drawer (Menu) */}
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => toggleDrawer(true)}>
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => toggleDrawer(true)} className='hamburger-icon'>
             <MenuIcon />
           </IconButton>
 
@@ -38,10 +38,10 @@ const Header = () => {
           {/* Right side: Logout Button */}
           {isLoggedIn && (
             <Button
-              color="inherit"
+              color="primary"
               startIcon={<LogoutIcon />}
               onClick={handleLogout}
-              sx={{ marginLeft: 'auto' }} // Move the button to the right
+              sx={{ marginLeft: 'auto', color: '#705C53' }} // Move the button to the right
             >
               Logout
             </Button>
