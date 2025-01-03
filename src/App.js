@@ -7,6 +7,7 @@ import Header from './components/Header';
 import EmergencyLogin from './components/EmergencyLogin';
 import MyPhotos from './components/MyPhotos';
 import Photos from './components/Photos';
+import Loading from './components/Loading'; // Import the Loading component
 import './App.css';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -23,8 +24,7 @@ const theme = createTheme({
   components: {
     MuiTabs: {
       styleOverrides: {
-        root: {
-        },
+        root: {},
       },
     },
     MuiTab: {
@@ -40,15 +40,15 @@ const theme = createTheme({
     MuiPagination: {
       styleOverrides: {
         root: {
-          color: '#705C53',  // Color for text of pagination
+          color: '#705C53', // Color for text of pagination
         },
         ul: {
-          justifyContent: 'center',  // Center pagination items
+          justifyContent: 'center', // Center pagination items
         },
         item: {
           '&.Mui-selected': {
-            backgroundColor: '#705C53',  // Selected pagination item background color
-            color: 'white',  // Selected text color
+            backgroundColor: '#705C53', // Selected pagination item background color
+            color: 'white', // Selected text color
           },
         },
       },
@@ -59,8 +59,8 @@ const theme = createTheme({
           color: '#B7B7B7', // Set the text color of all buttons to #B7B7B7
         },
         '&.MuiButton-contained': {
-            color: '#B7B7B7', // Adjust for contained button
-          },
+          color: '#B7B7B7', // Adjust for contained button
+        },
       },
     },
     MuiListItemText: {
@@ -78,30 +78,35 @@ const theme = createTheme({
   },
 });
 
-
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsLoggedIn(!!user); // Set logged-in state based on authentication
+      setIsLoading(false); // Stop loading once the auth state is determined
     });
 
     return () => unsubscribe(); // Clean up listener on unmount
   }, []);
 
+  if (isLoading) {
+    return <Loading />; // Show the Loading screen while loading
+  }
+
   return (
     <ThemeProvider theme={theme}>
-    <Router>
-      {isLoggedIn && <Header />} {/* Show Header only when user is logged in */}
-      <Routes>
-        <Route path="/" element={!isLoggedIn ? <Auth /> : <LandingPage />} />
-        <Route path="/landing" element={<LandingPage />} />
-        <Route path="/emergencylogin" element={<EmergencyLogin />} />
-        <Route path="/myphotos" element={<MyPhotos />} />
-        <Route path="/photos" element={<Photos />} />
-      </Routes>
-    </Router>
+      <Router>
+        {isLoggedIn && <Header />} {/* Show Header only when user is logged in */}
+        <Routes>
+          <Route path="/" element={!isLoggedIn ? <Auth /> : <LandingPage />} />
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/emergencylogin" element={<EmergencyLogin />} />
+          <Route path="/myphotos" element={<MyPhotos />} />
+          <Route path="/photos" element={<Photos />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 };

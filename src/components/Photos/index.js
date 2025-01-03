@@ -19,6 +19,7 @@ import { doc, getDocs, collection } from 'firebase/firestore';
 import { Masonry } from '@mui/lab';
 import { engagementPhotosDb, auth } from '../../firebase';  // Firebase config
 import './styles.css';
+import Loading from '../Loading';
 
 const PhotosPage = () => {
   const [photos, setPhotos] = useState({
@@ -142,9 +143,7 @@ const PhotosPage = () => {
 
   if (loading) {
     return (
-      <Container>
-        <CircularProgress />
-      </Container>
+      <Loading />
     );
   }
 

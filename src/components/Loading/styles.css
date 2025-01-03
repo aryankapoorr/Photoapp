@@ -1,0 +1,52 @@
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #F5F5F7, #EDDFE0);
+    color: #705C53;
+    text-align: center;
+  }
+  
+  .loading-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold !important;
+    margin-bottom: 20px;
+    color: #705C53 !important;
+  }
+  
+  .loading-bar-container {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 10px;
+  }
+  
+  .loading-bar {
+    height: 8px;
+    border-radius: 4px;
+    background-color: rgba(247, 247, 247, 0.8) !important;
+  }
+  
+  .MuiLinearProgress-bar {
+    background-color: #705C53 !important;
+  }
+  
+  .loading-subtext {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #B7B7B7 !important;
+    margin-top: 20px;
+    animation: fadeIn 2s infinite alternate;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
