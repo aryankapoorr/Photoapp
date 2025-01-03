@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Input, Button, Typography, Card } from '@mui/joy';
+import { Box, Input, Button, Typography, Card } from '@mui/material';
 import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import './styles.css';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { Input, Button, Typography, Box, Card, Divider } from '@mui/joy';
+import { Input, Button, Typography, Box, Card, Divider } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { auth, engagementPhotosDb } from '../../firebase';
 import {
