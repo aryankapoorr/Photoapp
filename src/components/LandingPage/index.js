@@ -200,9 +200,10 @@ const LandingPage = () => {
 
       {/* Passkey Dialog */}
       <Dialog open={openPasskeyDialog} onClose={() => setOpenPasskeyDialog(false)}>
-        <DialogTitle>Enter Passkey</DialogTitle>
+        <DialogTitle>Enter the Passkey Posted</DialogTitle>
         <DialogContent>
           <TextField
+            variant="standard"
             label="Passkey"
             value={passkey}
             onChange={(e) => setPasskey(e.target.value)}
@@ -210,7 +211,7 @@ const LandingPage = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handlePasskeySubmit} color="primary">
+          <Button onClick={handlePasskeySubmit} sx={{color: '#705C53'}}>
             Submit
           </Button>
         </DialogActions>
@@ -221,14 +222,13 @@ const LandingPage = () => {
         <DialogTitle>Enter Your Name</DialogTitle>
         <DialogContent>
           <TextField
-            label="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleNameSubmit} color="primary">
+          <Button onClick={handleNameSubmit} sx={{color: '#705C53'}}>
             Submit
           </Button>
         </DialogActions>

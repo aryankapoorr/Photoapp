@@ -15,6 +15,8 @@ import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { auth, engagementPhotosDb } from '../../firebase';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './styles.css'; // Importing the CSS file
+import Loading from '../Loading';
+import NoPhotos from '../NoPhotos';
 
 const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -85,13 +87,13 @@ const MyPhotos = () => {
   };
 
   if (loading) {
-    return <Typography>Loading photos...</Typography>;
+    return <Loading />;
   }
 
   return (
     <Box className="my-photos-container" style={{ marginTop: '64px' }}>
       {photos.length === 0 ? (
-        <Typography className="no-photos">No photos available</Typography>
+        <NoPhotos />
       ) : (
         <ImageList cols={2} gap={8} className="photo-grid">
           {photos.map((photo) => (
@@ -121,18 +123,22 @@ const MyPhotos = () => {
         onClose={closeDeleteDialog}
         aria-labelledby="delete-photo-dialog-title"
         aria-describedby="delete-photo-dialog-description"
+        variant="primary"
+        sx={{
+            color: '#EDDFE0'
+        }}
       >
         <DialogTitle id="delete-photo-dialog-title">Confirm Deletion</DialogTitle>
         <DialogContent>
           <Typography id="delete-photo-dialog-description">
-            Are you sure you want to delete this photo? This action cannot be undone.
+            Are you sure you want to delete this photo?
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDeleteDialog} color="primary">
+          <Button onClick={closeDeleteDialog} sx={{color: '#705C53'}}>
             Cancel
           </Button>
-          <Button onClick={handleDeletePhoto} color="secondary">
+          <Button onClick={handleDeletePhoto} sx={{color: 'red'}}>
             Delete
           </Button>
         </DialogActions>

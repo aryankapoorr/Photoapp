@@ -33,7 +33,6 @@ const Loading = () => {
       </Typography>
       <img
         src={selectedImage}
-        alt="Loading Visual"
         style={{
           width: '200px',
           height: '200px',
