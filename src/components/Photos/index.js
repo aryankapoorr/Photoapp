@@ -217,7 +217,7 @@ const PhotosPage = () => {
           )}
           page={currentPage}
           onChange={handlePageChange}
-          color="705C53"
+          color="primary"
           sx={{
             justifyContent: 'center',
             display: 'flex',
