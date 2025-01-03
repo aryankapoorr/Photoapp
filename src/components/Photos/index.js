@@ -1,9 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Container, CircularProgress, Tabs, Tab, Box, Pagination, Modal, IconButton, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
+import {
+  Container,
+  CircularProgress,
+  Box,
+  Pagination,
+  Modal,
+  IconButton,
+  Tabs,
+  Tab,
+  Fade,
+} from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import useWindowSize from './useWindowSize';
-import { useLocation } from 'react-router-dom';
+import { Masonry } from '@mui/lab';
 import './styles.css';
 
 const PhotosPage = () => {
@@ -14,26 +23,15 @@ const PhotosPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const { height } = useWindowSize();
-  const [pageSize, setPageSize] = useState(0);
+  const [currentPhotos, setCurrentPhotos] = useState([]);
+  const [nextPhotos, setNextPhotos] = useState([]);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const location = useLocation();
 
-  // Function to calculate page size dynamically based on screen height and width
-  const calculatePageSize = useCallback(() => {
-    const screenHeight = window.innerHeight;
-    const approxPhotoHeight = 150; // Adjust based on typical photo height
-    const columnCount = window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4; // Match ImageList columns
-  
-    const rowsPerPage = Math.floor(screenHeight / (approxPhotoHeight + 16)); 
-    setPageSize(rowsPerPage * columnCount);
-  }, []);
+  const photosPerPage = 15;
 
   useEffect(() => {
-    calculatePageSize();
-    window.addEventListener('resize', calculatePageSize);
-
     const fetchPhotos = async () => {
       try {
         const storage = getStorage();
@@ -60,6 +58,7 @@ const PhotosPage = () => {
 
         setPhotos({ engagementDay: engagementDayUrls, engagementParty: engagementPartyUrls });
         setLoading(false);
+        setCurrentPhotos(engagementDayUrls.slice(0, photosPerPage)); // Default to Engagement Day
       } catch (error) {
         console.error("Error fetching photos: ", error);
         setLoading(false);
@@ -67,41 +66,52 @@ const PhotosPage = () => {
     };
 
     fetchPhotos();
+  }, []);
 
-    return () => window.removeEventListener('resize', calculatePageSize);
-  }, [height, calculatePageSize]);
-
-  // Memoizing tab change handler to avoid unnecessary re-renders
-  const handleTabChange = useCallback((event, newValue) => {
+  const handleTabChange = (event, newValue) => {
+    setIsTransitioning(true);
     setActiveTab(newValue);
-    setCurrentPage(1); // Reset to the first page when the tab changes
-    window.history.pushState({}, '', `?page=${currentPage}&tab=${newValue}`);
-  }, [currentPage]);
+    setCurrentPage(1); // Reset to first page for the new tab
+    const next = getPaginatedPhotos(1, newValue);
 
-  // Memoizing page change handler to avoid unnecessary re-renders
-  const handlePageChange = useCallback((event, value) => {
-    setCurrentPage(value);
-    window.history.pushState({}, '', `?page=${value}&tab=${activeTab}`);
-  }, [activeTab]);
+    // Delay state update until fade-out completes
+    setTimeout(() => {
+      setCurrentPhotos(next);
+      setIsTransitioning(false);
+    }, 300); // Match this with the fade-out duration
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+  };
 
-  // Memoizing the function to get paginated photos
-  const getPaginatedPhotos = useCallback((photos) => {
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    return photos.slice(startIndex, endIndex);
-  }, [currentPage, pageSize]);
+  const handlePageChange = (event, value) => {
+    setIsTransitioning(true);
+    const next = getPaginatedPhotos(value, activeTab);
+    setNextPhotos(next);
 
-  // Handle photo click to expand in modal
-  const handlePhotoClick = useCallback((photoUrl) => {
+    // Delay state update until fade-out completes
+    setTimeout(() => {
+      setCurrentPhotos(next);
+      setCurrentPage(value);
+      setIsTransitioning(false);
+    }, 300); // Match this with the fade-out duration
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+  };
+
+  const getPaginatedPhotos = useCallback((page, tab) => {
+    const startIndex = (page - 1) * photosPerPage;
+    const endIndex = startIndex + photosPerPage;
+    const currentPhotoSet = photos[tab === 0 ? 'engagementDay' : 'engagementParty'];
+    return currentPhotoSet.slice(startIndex, endIndex);
+  }, [photos]);
+
+  const handlePhotoClick = (photoUrl) => {
     setSelectedPhoto(photoUrl);
     setOpenModal(true);
-  }, []);
+  };
 
-  // Close the modal
-  const handleCloseModal = useCallback(() => {
+  const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedPhoto(null);
-  }, []);
+  };
 
   if (loading) {
     return (
@@ -112,47 +122,71 @@ const PhotosPage = () => {
   }
 
   return (
-    <Container sx={{ paddingBottom: '100px' }}> {/* Add padding to prevent content overlap with pagination */}
-      {/* Tabs Stacked Below Header */}
-      <Box sx={{ width: '100%', position: 'sticky', top: 64, zIndex: 10, backgroundColor: '#fff', borderBottom: '1px solid #ccc' }}>
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          variant="fullWidth"
-          centered
-          aria-label="photo categories"
-        >
-          <Tab label="Engagement Day Photos" />
-          <Tab label="Engagement Party Photos" />
+    <Container>
+      {/* Tabs for Switching Streams */}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={activeTab} onChange={handleTabChange} centered>
+          <Tab label="Engagement Day" />
+          <Tab label="Engagement Party" />
         </Tabs>
       </Box>
 
-      {/* Woven ImageList for Grid */}
-      <ImageList 
-        variant="woven" 
-        cols={window.innerWidth <= 600 ? 2 : window.innerWidth <= 960 ? 3 : 4} 
-        gap={16}
-      >
-        {getPaginatedPhotos(photos[activeTab === 0 ? 'engagementDay' : 'engagementParty']).map((photoUrl, index) => (
-          <ImageListItem key={index}>
-            <img
-              src={photoUrl}
-              alt={`Photo ${index}`}
-              className="photo-img"
-              onClick={() => handlePhotoClick(photoUrl)}
-            />
-            {/* Only add descriptions for Engagement Party Photos */}
-            {activeTab === 1 && (
-              <ImageListItemBar
-                title={`Photo ${index}`}
-                subtitle={<span>Click to expand</span>}
+      {/* Masonry Image List */}
+      <Fade in={!isTransitioning}>
+        <Masonry
+          columns={{ xs: 2, sm: 3, md: 3 }}
+          spacing={2}
+          sx={{ marginTop: 2 }}
+        >
+          {currentPhotos.map((photoUrl, index) => (
+            <div key={index} onClick={() => handlePhotoClick(photoUrl)} className="photo-container">
+              <img
+                src={photoUrl}
+                alt={`Photo ${index}`}
+                className="photo-img"
+                style={{
+                  width: '100%',
+                  borderRadius: 8,
+                  transition: 'transform 0.3s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
               />
-            )}
-          </ImageListItem>
-        ))}
-      </ImageList>
+            </div>
+          ))}
+        </Masonry>
+      </Fade>
 
-      {/* Modal for Photo Enlargement */}
+      {/* Pagination Fixed at Bottom */}
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          backgroundColor: 'white',
+          zIndex: 10,
+          padding: 2,
+          textAlign: 'center',
+        }}
+      >
+        <Pagination
+          count={Math.ceil(
+            photos[activeTab === 0 ? 'engagementDay' : 'engagementParty'].length / photosPerPage
+          )}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          sx={{
+            justifyContent: 'center',
+            display: 'flex',
+          }}
+        />
+      </Box>
+
+      {/* Padding to Prevent Last Row Being Covered */}
+      <Box sx={{ height: 80 }} />
+
+      {/* Modal for Enlarged Photo */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box className="modal-box">
           <IconButton onClick={handleCloseModal} className="modal-close-btn">
@@ -161,29 +195,6 @@ const PhotosPage = () => {
           <img src={selectedPhoto} alt="Expanded Photo" className="modal-photo" />
         </Box>
       </Modal>
-
-      {/* Pagination fixed at the bottom */}
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        backgroundColor: '#fff',
-        zIndex: 10,
-        boxShadow: '0px -2px 5px rgba(0, 0, 0, 0.1)',
-        padding: '10px 0',
-      }}>
-        <Pagination
-          count={Math.ceil(
-            photos[activeTab === 0 ? 'engagementDay' : 'engagementParty'].length / pageSize
-          )}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-        />
-      </Box>
     </Container>
   );
 };
