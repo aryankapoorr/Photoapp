@@ -151,8 +151,15 @@ const PhotosPage = () => {
   return (
     <Container>
       {/* Tabs for Switching Streams */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={activeTab} onChange={handleTabChange} centered>
+      <Box>
+        <Tabs value={activeTab} 
+            onChange={handleTabChange} 
+            allowScrollButtonsMobile
+            centered 
+            position="sticky"
+            variant="fullWidth"
+            scrollButtons="auto"
+        >
           <Tab label="Engagement Day" />
           <Tab label="Engagement Party" />
         </Tabs>
@@ -182,7 +189,7 @@ const PhotosPage = () => {
                 loading="lazy"
               />
               { activeTab === 1 && users[photoUrl] ? <ImageListItemBar
-                title={users[photoUrl]}
+                subtitle={users[photoUrl]}
             /> : <span></span>}
             </ImageListItem>
             </div>
@@ -198,20 +205,23 @@ const PhotosPage = () => {
           width: '100%',
           backgroundColor: 'white',
           zIndex: 10,
-          padding: 2,
+          padding: 1,
           textAlign: 'center',
         }}
+        className='pagination-box'
       >
         <Pagination
+          shape='rounded'
           count={Math.ceil(
             photos[activeTab === 0 ? 'engagementDay' : 'engagementParty'].length / photosPerPage
           )}
           page={currentPage}
           onChange={handlePageChange}
-          color="primary"
+          color="705C53"
           sx={{
             justifyContent: 'center',
             display: 'flex',
+            color: '#705C53', // Custom color for the text
           }}
         />
       </Box>
@@ -222,10 +232,10 @@ const PhotosPage = () => {
       {/* Modal for Enlarged Photo */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box className="modal-box">
+          <img src={selectedPhoto} alt="Expanded Photo" className="modal-photo" />
           <IconButton onClick={handleCloseModal} className="modal-close-btn">
             <CloseIcon />
           </IconButton>
-          <img src={selectedPhoto} alt="Expanded Photo" className="modal-photo" />
         </Box>
       </Modal>
     </Container>

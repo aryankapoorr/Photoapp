@@ -9,6 +9,51 @@ import MyPhotos from './components/MyPhotos';
 import Photos from './components/Photos';
 import './App.css';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#705C53',
+    },
+  },
+  components: {
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: '#705C53',
+        },
+        selected: {
+          color: '#705C53',
+        },
+      },
+    },
+    MuiPagination: {
+      styleOverrides: {
+        root: {
+          color: '#705C53',  // Color for text of pagination
+        },
+        ul: {
+          justifyContent: 'center',  // Center pagination items
+        },
+        item: {
+          '&.Mui-selected': {
+            backgroundColor: '#705C53',  // Selected pagination item background color
+            color: 'white',  // Selected text color
+          },
+        },
+      },
+    },
+  },
+});
+
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -21,6 +66,7 @@ const App = () => {
   }, []);
 
   return (
+    <ThemeProvider theme={theme}>
     <Router>
       {isLoggedIn && <Header />} {/* Show Header only when user is logged in */}
       <Routes>
@@ -31,6 +77,7 @@ const App = () => {
         <Route path="/photos" element={<Photos />} />
       </Routes>
     </Router>
+    </ThemeProvider>
   );
 };
 

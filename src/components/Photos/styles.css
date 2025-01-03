@@ -20,9 +20,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
+    width: 80%; /* Reduce width for the modal */
     max-width: 100%;
-    height: 100vh;
+    height: 80%; /* Reduce height for the modal */
     max-height: 100vh;
     background-color: white;
     border-radius: 8px;
@@ -37,7 +37,7 @@
   .modal-photo {
     width: 100%;
     height: auto;
-    max-height: 100%;
+    max-height: 90%; /* Ensure the image fits within the modal without cutting off */
     object-fit: contain; /* Ensure the entire photo is visible within the modal */
     border-radius: 8px;
   }
@@ -49,6 +49,44 @@
     z-index: 10;
   }
   
+  /* Pagination Styling */
   .pagination {
-    margin-bottom: 75 !important;
+    margin-bottom: 75px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+  
+  /* Tabs Styling */
+  .MuiTabs-root {
+    position: sticky !important;
+    top: 64px; /* Adjust this if the header height changes */
+    z-index: 10;
+  }
+  
+  /* Floating Tabs (Sticky) */
+  .MuiTabs-flexContainer {
+    justify-content: center;
+  }
+  
+  /* Header Styling */
+  header {
+    height: 64px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pagination-box {
+    margin-left: -10px;
+    margin-bottom: -1px;
+    background-color: #EDDFE0 !important;
+    width: 100vw !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Make sure the pagination takes up the full width */
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
