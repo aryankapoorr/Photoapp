@@ -168,8 +168,9 @@ const LandingPage = () => {
         color="primary"
         onClick={handleAddPhotoClick}
         className="floating-camera-icon"
+        sx={{color: '#EDDFE0'}}
       >
-        <PhotoCameraIcon />
+        <PhotoCameraIcon sx={{fontSize: '2rem'}} />
       </IconButton>
 
       {/* Hidden file input to trigger native camera */}
@@ -184,15 +185,14 @@ const LandingPage = () => {
 
       {/* Dialog for retake/upload prompt */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Photo Options</DialogTitle>
         <DialogContent>
           <img src={photo} alt="Captured" style={{ width: '100%', height: 'auto' }} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleRetake} color="primary">
+          <Button onClick={handleRetake} sx={{color: '#705C53'}}>
             Retake
           </Button>
-          <Button onClick={handleUpload} color="primary">
+          <Button onClick={handleUpload} sx={{color: '#0000FF'}}>
             Upload
           </Button>
         </DialogActions>
