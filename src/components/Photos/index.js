@@ -168,7 +168,7 @@ const PhotosPage = () => {
       {/* Masonry Image List */}
       <Fade in={!isTransitioning}>
         <Masonry
-          columns={{ xs: 3, sm: 3, md: 3 }}
+          columns={{ xs: 2, sm: 3, md: 3 }}
           spacing={2}
           sx={{ marginTop: 2 }}
         >
