@@ -9,10 +9,15 @@ import {
   Tabs,
   Tab,
   Fade,
+  Typography,
+  ImageListItemBar,
+  ImageListItem
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { doc, getDocs, collection } from 'firebase/firestore';
 import { Masonry } from '@mui/lab';
+import { engagementPhotosDb, auth } from '../../firebase';  // Firebase config
 import './styles.css';
 
 const PhotosPage = () => {
@@ -20,6 +25,7 @@ const PhotosPage = () => {
     engagementDay: [],
     engagementParty: [],
   });
+  const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +36,12 @@ const PhotosPage = () => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   const photosPerPage = 15;
+
+  useEffect(() => {
+    console.log('users')
+    console.log(users)
+  }, [users])
+  
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -57,6 +69,21 @@ const PhotosPage = () => {
         }));
 
         setPhotos({ engagementDay: engagementDayUrls, engagementParty: engagementPartyUrls });
+
+        // Fetch user names and create mapping to photos
+        const userDocs = await getDocs(collection(engagementPhotosDb, 'users'));
+        const userNameMap = {};
+        userDocs.forEach(doc => {
+          const userData = doc.data();
+          if (userData.photos) {
+            userData.photos.forEach(photo => {
+              userNameMap[photo.url] = userData.name
+            });
+          }
+        });
+
+
+        setUsers(userNameMap);
         setLoading(false);
         setCurrentPhotos(engagementDayUrls.slice(0, photosPerPage)); // Default to Engagement Day
       } catch (error) {
@@ -140,6 +167,7 @@ const PhotosPage = () => {
         >
           {currentPhotos.map((photoUrl, index) => (
             <div key={index} onClick={() => handlePhotoClick(photoUrl)} className="photo-container">
+                <ImageListItem>
               <img
                 src={photoUrl}
                 alt={`Photo ${index}`}
@@ -151,7 +179,12 @@ const PhotosPage = () => {
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
                 onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                loading="lazy"
               />
+              { activeTab === 1 && users[photoUrl] ? <ImageListItemBar
+                title={users[photoUrl]}
+            /> : <span></span>}
+            </ImageListItem>
             </div>
           ))}
         </Masonry>
