@@ -16,7 +16,7 @@
   
   .MuiDrawer-paper {
     width: 100% !important;
-    height: 50% !important; /* Height for the top-down drawer */
+    height: 75% !important; /* Height for the top-down drawer */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center the items vertically */
@@ -35,6 +35,7 @@
     color: #000;
     margin-left: 0px !important;
     margin-bottom: -15px !important;
+    font-size: 2rem !important;
   }
   
   /* Menu Item Styling */
@@ -42,9 +43,11 @@
     text-align: center;
     width: 100% !important;
     padding: 2rem !important; /* Increase padding for larger items */
-    font-weight: 600;
+    font-weight: 600 !important;
     font-size: 1.5rem !important; /* Increase font size */
     color: #333;
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
   }
   
   /* Center text within each menu item */

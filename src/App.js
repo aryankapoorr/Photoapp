@@ -63,6 +63,18 @@ const theme = createTheme({
           },
       },
     },
+    MuiListItemText: {
+      styleOverrides: {
+        primary: {
+          fontSize: '2rem', // Increase font size for primary text
+          fontWeight: 'bold', // Make the text bold
+        },
+        secondary: {
+          fontSize: '1.2rem', // Optional: Adjust secondary text size
+          fontWeight: 'normal', // Optional: Set secondary text weight
+        },
+      },
+    },
   },
 });
 

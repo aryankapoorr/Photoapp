@@ -64,7 +64,7 @@ const Header = () => {
           </ListItemButton>
 
           <ListItemButton onClick={() => { toggleDrawer(false); navigate('/photos'); }} className="menu-item">
-            <ListItemText className="list-text" primary="Photo Feed" />
+            <ListItemText className="list-text" variant="h2" primary="Photo Feed" />
           </ListItemButton>
 
           <ListItemButton onClick={() => { toggleDrawer(false); navigate('/myphotos'); }} className="menu-item">
@@ -81,7 +81,7 @@ const Header = () => {
           onClick={() => toggleDrawer(false)}
           className="close-btn"
         >
-          <CloseIcon />
+          <CloseIcon sx={{fontSize: '2.5rem'}}/>
         </IconButton>
       </Drawer>
     </>
