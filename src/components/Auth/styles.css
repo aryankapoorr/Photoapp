@@ -9,7 +9,7 @@
   }
   
   .login-card {
-    padding: 2rem;
+    padding: 1.5rem; /* Reduced padding for better spacing */
     width: 90%; /* Adjust the width for smaller screens */
     max-width: 400px; /* Maximum width remains the same */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -27,7 +27,10 @@
   }
   
   .login-input {
-    margin-bottom: 1rem !important;
+    margin-bottom: 0.75rem !important; /* Reduced margin for better spacing */
+    padding: 0.5rem; /* Adjusted padding for a more compact look */
+    font-size: 14px; /* Smaller font size */
+    margin-top: .75rem !important;
   }
   
   .login-message {
@@ -37,8 +40,9 @@
   }
   
   .login-button {
-    margin-bottom: 1.5rem;
     background-color: #705C53 !important;
+    padding: 0.75rem; /* Adjusted padding for a smaller button */
+    color: #FFFFFF !important;
   }
   
   .google-login-wrapper {
@@ -53,7 +57,6 @@
     max-width: 400px; /* Optional: limits the max width */
   }
   
-  /* Adjust the styling for the graphic and its container */
   .graphic-container {
     text-align: center;
     margin-bottom: 20px;
@@ -62,13 +65,14 @@
   
   .login-graphic {
     width: 100%;
-    max-width: 300px;  /* Adjust as per the image size */
+    max-width: 250px;  /* Reduced max-width for a smaller image */
     height: auto;
   }
   
   .divider-or {
     text-align: center;
     font-weight: bold;
-    margin: 20px 0;
+    margin: 20px 0 !important;
+    margin-top: 10px ;
   }
   

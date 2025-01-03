@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { Input, Button, Typography, Box, Card, Divider } from '@mui/material';
+import { TextField, Button, Typography, Box, Card, Divider } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { auth, engagementPhotosDb } from '../../firebase';
 import {
@@ -163,31 +163,36 @@ const Auth = () => {
         </Box>
 
         <Card className="login-card">
-          <Typography level="h4" className="login-header">
+          <Typography variant="h6" className="login-header">
             Welcome!
           </Typography>
 
-          <Input
+          <TextField
+            size="small"
+            label="Enter your email"
             type="email"
-            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="login-input"
             fullWidth
+            variant="outlined"
           />
 
           {message && (
-            <Typography level="body2" className="login-message">
+            <Typography variant="body2" className="login-message">
               {message}
             </Typography>
           )}
 
           <Button
-            variant="solid"
-            color="primary"
+            variant="contained"
+            color="secondary"
             onClick={handleRegister}
             className="login-button"
             fullWidth
+            sx={{
+                color: '#FFFFFF',  // Set the text color of the button to #B7B7B7
+              }}
           >
             Proceed
           </Button>
@@ -208,9 +213,9 @@ const Auth = () => {
         <Dialog open={namePromptOpen} onClose={() => setNamePromptOpen(false)}>
           <DialogTitle>Enter Your Name</DialogTitle>
           <DialogContent>
-            <Input
+            <TextField
+              label="Your Name"
               type="text"
-              placeholder="Your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               fullWidth

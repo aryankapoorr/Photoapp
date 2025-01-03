@@ -16,6 +16,9 @@ const theme = createTheme({
     primary: {
       main: '#705C53',
     },
+    secondary: {
+      main: '#B7B7B7',
+    },
   },
   components: {
     MuiTabs: {
@@ -48,6 +51,16 @@ const theme = createTheme({
             color: 'white',  // Selected text color
           },
         },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: '#B7B7B7', // Set the text color of all buttons to #B7B7B7
+        },
+        '&.MuiButton-contained': {
+            color: '#B7B7B7', // Adjust for contained button
+          },
       },
     },
   },
