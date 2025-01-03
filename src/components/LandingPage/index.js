@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';  // Camera icon for "Add Photo"
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
@@ -9,6 +9,10 @@ import './styles.css';
 const LandingPage = () => {
   const [photo, setPhoto] = useState(null); // State to hold the captured photo
   const [openDialog, setOpenDialog] = useState(false); // Dialog for retake/upload prompt
+  const [openPasskeyDialog, setOpenPasskeyDialog] = useState(false); // Dialog for passkey prompt
+  const [openNameDialog, setOpenNameDialog] = useState(false); // Dialog for name prompt
+  const [passkey, setPasskey] = useState(''); // State to store the passkey input
+  const [name, setName] = useState(''); // State to store the name input
   const fileInputRef = React.createRef(); // Reference to the hidden file input
 
   const handleAddPhotoClick = () => {
@@ -97,8 +101,6 @@ const LandingPage = () => {
     );
   };
   
-  
-
   const dataURLToBlob = (dataURL) => {
     const byteString = atob(dataURL.split(',')[1]);
     const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
@@ -108,6 +110,55 @@ const LandingPage = () => {
       uintArray[i] = byteString.charCodeAt(i);
     }
     return new Blob([uintArray], { type: mimeString });
+  };
+
+  // Function to check the passkey and user name
+  useEffect(() => {
+    const checkUserData = async () => {
+      const userId = auth.currentUser?.uid;
+      if (!userId) return;
+
+      const userRef = doc(engagementPhotosDb, 'users', userId);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+
+        // Check if passkey is set
+        if (!userData.passkey) {
+          setOpenPasskeyDialog(true); // Show passkey dialog
+        }
+
+        // Check if name is set
+        if (!userData.name) {
+          setOpenNameDialog(true); // Show name dialog
+        }
+      }
+    };
+
+    checkUserData();
+  }, []);
+
+  const handlePasskeySubmit = async () => {
+    if (passkey === 'theoneiwant') {
+      const userId = auth.currentUser?.uid;
+      if (!userId) return;
+
+      const userRef = doc(engagementPhotosDb, 'users', userId);
+      await updateDoc(userRef, { passkey: true });
+      setOpenPasskeyDialog(false); // Close passkey dialog
+    } else {
+      alert('Incorrect passkey. Try again.');
+    }
+  };
+
+  const handleNameSubmit = async () => {
+    const userId = auth.currentUser?.uid;
+    if (!userId || !name) return;
+
+    const userRef = doc(engagementPhotosDb, 'users', userId);
+    await updateDoc(userRef, { name });
+    setOpenNameDialog(false); // Close name dialog
   };
 
   return (
@@ -143,6 +194,42 @@ const LandingPage = () => {
           </Button>
           <Button onClick={handleUpload} color="primary">
             Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Passkey Dialog */}
+      <Dialog open={openPasskeyDialog} onClose={() => setOpenPasskeyDialog(false)}>
+        <DialogTitle>Enter Passkey</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Passkey"
+            value={passkey}
+            onChange={(e) => setPasskey(e.target.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handlePasskeySubmit} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Name Dialog */}
+      <Dialog open={openNameDialog} onClose={() => setOpenNameDialog(false)}>
+        <DialogTitle>Enter Your Name</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleNameSubmit} color="primary">
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
