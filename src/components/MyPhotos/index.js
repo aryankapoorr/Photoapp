@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  ImageList,
+  ImageListItem,
+} from '@mui/material';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { auth, engagementPhotosDb } from '../../firebase';
 import DeleteIcon from '@mui/icons-material/Delete';
-import './styles.css';  // Importing the CSS file
+import './styles.css'; // Importing the CSS file
 
 const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -44,17 +54,15 @@ const MyPhotos = () => {
     if (!photoToDelete) return;
 
     try {
-      // Deleting photo from Firebase Storage
       const storage = getStorage();
       const photoRef = ref(storage, `engagementpartyphotos/${photoToDelete.id}.png`);
       await deleteObject(photoRef);
 
-      // Deleting photo from Firestore photos array
       const userRef = doc(engagementPhotosDb, 'users', userId);
       const userDoc = await getDoc(userRef);
 
       if (userDoc.exists()) {
-        const updatedPhotos = userDoc.data().photos.filter(photo => photo.id !== photoToDelete.id);
+        const updatedPhotos = userDoc.data().photos.filter((photo) => photo.id !== photoToDelete.id);
         await updateDoc(userRef, { photos: updatedPhotos });
         setPhotos(updatedPhotos);
       }
@@ -81,25 +89,30 @@ const MyPhotos = () => {
   }
 
   return (
-    <Box className="my-photos-container" style={{ marginTop: '64px' }}> {/* Added marginTop */}
+    <Box className="my-photos-container" style={{ marginTop: '64px' }}>
       {photos.length === 0 ? (
         <Typography className="no-photos">No photos available</Typography>
       ) : (
-        <Grid container className="photo-grid">
+        <ImageList cols={2} gap={8} className="photo-grid">
           {photos.map((photo) => (
-            <Grid item xs={12} key={photo.id} className="photo-item">
-              <div className="photo-container">
-                <img src={photo.url} alt="User" className="photo-img" />
-                <Button
-                  onClick={() => openDeleteDialog(photo)}
-                  className="delete-button"
-                >
-                  <DeleteIcon style={{ color: '#f44336', fontSize: '36px' }} />
-                </Button>
-              </div>
-            </Grid>
+            <ImageListItem key={photo.id} className="photo-item">
+              <img src={photo.url} alt="User" className="photo-img" />
+              <Button
+                onClick={() => openDeleteDialog(photo)}
+                className="delete-button"
+                style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '8px',
+                  zIndex: 1,
+                  borderRadius: '50%',
+                }}
+              >
+                <DeleteIcon style={{ color: '#f44336', fontSize: '35px' }} />
+              </Button>
+            </ImageListItem>
           ))}
-        </Grid>
+        </ImageList>
       )}
 
       {/* Delete Confirmation Dialog */}

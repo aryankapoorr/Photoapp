@@ -27,7 +27,7 @@ const Header = () => {
         <Toolbar>
           {/* Left side: Drawer (Menu) */}
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => toggleDrawer(true)} className='hamburger-icon'>
-            <MenuIcon />
+            <MenuIcon sx={{fontSize: '2rem'}}/>
           </IconButton>
 
           {/* Centered Title */}
