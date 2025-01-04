@@ -14,11 +14,15 @@
   }
   
   .placeholder-img {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    margin: 0 auto;
+    display: block;
+    width: 80%; /* This ensures a 10% margin on both left and right */
+    margin: 0 auto; /* Centers the image horizontally */
+    border: 5px solid #ccc; /* Adds a frame with a light grey border */
+    border-radius: 8px; /* Slightly rounds the corners of the frame */
+    object-fit: contain; /* Ensures the image maintains its aspect ratio */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
   }
+  
   
   .upload-button {
     background-color: #705c53 !important;
@@ -26,7 +30,6 @@
     padding: 10px 20px !important;
     border-radius: 5px !important;
     font-size: 16px !important;
-    margin-top: 20px !important;
     text-transform: none !important;
   }
   
