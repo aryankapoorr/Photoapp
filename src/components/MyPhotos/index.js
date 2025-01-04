@@ -95,7 +95,7 @@ const MyPhotos = () => {
       {photos.length === 0 ? (
         <NoPhotos />
       ) : (
-        <ImageList cols={2} gap={8} className="photo-grid">
+        <ImageList cols={2} gap={8} className="photo-grid" variant="masonry">
           {photos.map((photo) => (
             <ImageListItem key={photo.id} className="photo-item">
               <img src={photo.url} alt="User" className="photo-img" />
