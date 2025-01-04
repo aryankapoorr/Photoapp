@@ -5,6 +5,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, engagementPhotosDb } from '../../firebase'; // Adjust imports as needed
 import { useNavigate } from 'react-router-dom'; // For navigation
 import Loading from '../Loading'; // Import your Loading component
+import photo from '../../constants/detailedLetters.jpg'
 import './styles.css';
 
 const Home = () => {
@@ -88,11 +89,11 @@ const Home = () => {
       ) : (
         <Box className="home-container">
           <Typography variant="h4" className="greeting-text">
-            Welcome to Aarti and Kevin's Engagement Party Photos!
+            Aarti and Kevin's Engagement Party Photos
           </Typography>
 
           <Box className="image-container">
-            <img src="roscoe.jpeg" alt="Event Placeholder" className="placeholder-img" />
+            <img src={photo} alt="Event Placeholder" className="placeholder-img" />
           </Box>
 
           <Button variant="contained" component="label" className="upload-button">

@@ -6,6 +6,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { engagementPhotosDb, auth } from '../../firebase';  // Firebase config
 import './styles.css';
 import Home from '../Home';
+import Loading from '../Loading';
 
 const LandingPage = () => {
   const [photo, setPhoto] = useState(null); // State to hold the captured photo
@@ -14,6 +15,7 @@ const LandingPage = () => {
   const [openNameDialog, setOpenNameDialog] = useState(false); // Dialog for name prompt
   const [passkey, setPasskey] = useState(''); // State to store the passkey input
   const [name, setName] = useState(''); // State to store the name input
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = React.createRef(); // Reference to the hidden file input
 
   const handleAddPhotoClick = () => {
@@ -41,6 +43,9 @@ const LandingPage = () => {
 
   const handleUpload = async () => {
     if (!photo) return;
+
+    setIsLoading(true);
+    setOpenDialog(false);
   
     // Generate a unique photo ID
     const photoId = new Date().getTime().toString();
@@ -71,6 +76,7 @@ const LandingPage = () => {
           const userId = auth.currentUser?.uid;
           if (!userId) {
             console.error('User not authenticated');
+            setIsLoading(false);
             return;
           }
   
@@ -81,6 +87,7 @@ const LandingPage = () => {
           const userDoc = await getDoc(userRef);
           if (!userDoc.exists()) {
             console.error('User document not found');
+            setIsLoading(false);
             return;
           }
   
@@ -92,10 +99,10 @@ const LandingPage = () => {
           await updateDoc(userRef, {
             photos: updatedPhotos,
           });
-  
-          setOpenDialog(false); // Close the dialog
-          alert('Photo uploaded successfully!');
+
+          setIsLoading(false);
         } catch (error) {
+            setIsLoading(false);
           console.error('Failed to get download URL', error);
         }
       }
@@ -163,6 +170,10 @@ const LandingPage = () => {
   };
 
   return (
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
     <div className="landing-page">
         <Home />
       {/* Floating Camera Icon for "Add Photo" */}
@@ -172,7 +183,7 @@ const LandingPage = () => {
         className="floating-camera-icon"
         sx={{color: '#EDDFE0'}}
       >
-        <PhotoCameraIcon sx={{fontSize: '2rem'}} />
+        <PhotoCameraIcon sx={{fontSize: '2rem', color: '#705C53'}} />
       </IconButton>
 
       {/* Hidden file input to trigger native camera */}
@@ -235,7 +246,8 @@ const LandingPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </div>)}
+    </>
   );
 };
 

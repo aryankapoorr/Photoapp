@@ -81,7 +81,7 @@ const Header = () => {
           onClick={() => toggleDrawer(false)}
           className="close-btn"
         >
-          <CloseIcon sx={{fontSize: '2.5rem'}}/>
+          <CloseIcon sx={{fontSize: '2.5rem', color: '#705C53'}}/>
         </IconButton>
       </Drawer>
     </>
