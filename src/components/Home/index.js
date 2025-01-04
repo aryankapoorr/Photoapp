@@ -110,10 +110,10 @@ const Home = () => {
               </Typography>
             </DialogContent>
             <DialogActions>
-              <Button onClick={() => setOpenDialog(false)} color="primary">
+              <Button onClick={() => setOpenDialog(false)} sx={{color: '#705C53'}}>
                 Cancel
               </Button>
-              <Button onClick={handleUpload} color="secondary">
+              <Button onClick={handleUpload} sx={{color: '#0000FF'}}>
                 Upload
               </Button>
             </DialogActions>
