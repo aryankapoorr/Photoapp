@@ -232,8 +232,8 @@ const PhotosPage = () => {
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box className="modal-box">
           <img src={selectedPhoto} alt="Expanded Photo" className="modal-photo" />
-          <IconButton onClick={handleCloseModal} className="modal-close-btn">
-            <CloseIcon />
+          <IconButton onClick={handleCloseModal} className="modal-close-btn" sx={{paddingTop: '0px'}}>
+            <CloseIcon sx={{fontSize: '2rem'}} />
           </IconButton>
         </Box>
       </Modal>
