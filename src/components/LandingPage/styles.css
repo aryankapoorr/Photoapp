@@ -25,8 +25,8 @@
     border-radius: 50% !important; /* Round shape */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3) !important; /* Shadow for visibility */
     transition: transform 0.3s ease-in-out !important; /* Smooth transition for hover */
-    height: 70px !important;
-    width: 70px !important;
+    height: 65px !important;
+    width: 65px !important;
     fontSize: 2rem !important;
   }
   

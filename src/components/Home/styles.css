@@ -1,0 +1,40 @@
+.home-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .greeting-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .image-container {
+    margin: 20px 0;
+  }
+  
+  .placeholder-img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin: 0 auto;
+  }
+  
+  .upload-button {
+    background-color: #705c53 !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    font-size: 16px !important;
+    margin-top: 20px !important;
+    text-transform: none !important;
+  }
+  
+  .upload-button:hover {
+    background-color: #5b4c3f !important;
+  }
+  
+  .dialog-container {
+    text-align: center;
+  }
+  

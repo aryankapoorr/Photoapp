@@ -5,6 +5,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { engagementPhotosDb, auth } from '../../firebase';  // Firebase config
 import './styles.css';
+import Home from '../Home';
 
 const LandingPage = () => {
   const [photo, setPhoto] = useState(null); // State to hold the captured photo
@@ -163,6 +164,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+        <Home />
       {/* Floating Camera Icon for "Add Photo" */}
       <IconButton
         color="primary"
