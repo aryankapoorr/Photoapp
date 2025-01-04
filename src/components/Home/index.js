@@ -88,7 +88,7 @@ const Home = () => {
         <Loading />
       ) : (
         <Box className="home-container">
-          <Typography variant="h4" className="greeting-text">
+          <Typography variant="h4" className="greeting-text" sx={{fontWeight: 'bold'}}>
             Aarti and Kevin's Engagement Party Photos
           </Typography>
 
