@@ -46,52 +46,59 @@ const PhotosPage = () => {
 
   useEffect(() => {
     const fetchPhotos = async () => {
-      try {
-        const storage = getStorage();
-        const engagementDayRef = ref(storage, 'engagementdayphotos/');
-        const engagementPartyRef = ref(storage, 'engagementpartyphotos/');
-
-        const [engagementDaySnapshot, engagementPartySnapshot] = await Promise.all([
-          listAll(engagementDayRef),
-          listAll(engagementPartyRef),
-        ]);
-
-        const engagementDayUrls = [];
-        const engagementPartyUrls = [];
-
-        await Promise.all(engagementDaySnapshot.items.map(async (item) => {
-          const url = await getDownloadURL(item);
-          engagementDayUrls.push(url);
-        }));
-
-        await Promise.all(engagementPartySnapshot.items.map(async (item) => {
-          const url = await getDownloadURL(item);
-          engagementPartyUrls.push(url);
-        }));
-
-        setPhotos({ engagementDay: engagementDayUrls, engagementParty: engagementPartyUrls });
-
-        // Fetch user names and create mapping to photos
-        const userDocs = await getDocs(collection(engagementPhotosDb, 'users'));
-        const userNameMap = {};
-        userDocs.forEach(doc => {
-          const userData = doc.data();
-          if (userData.photos) {
-            userData.photos.forEach(photo => {
-              userNameMap[photo.url] = userData.name
-            });
-          }
-        });
-
-
-        setUsers(userNameMap);
-        setLoading(false);
-        setCurrentPhotos(engagementDayUrls.slice(0, photosPerPage)); // Default to Engagement Day
-      } catch (error) {
-        console.error("Error fetching photos: ", error);
-        setLoading(false);
-      }
-    };
+        try {
+          const storage = getStorage();
+          const engagementDayRef = ref(storage, 'engagementdayphotos/');
+          const engagementPartyRef = ref(storage, 'engagementpartyphotos/');
+      
+          const [engagementDaySnapshot, engagementPartySnapshot] = await Promise.all([
+            listAll(engagementDayRef),
+            listAll(engagementPartyRef),
+          ]);
+      
+          const engagementDayUrls = [];
+          const engagementPartyUrls = [];
+      
+          await Promise.all(engagementDaySnapshot.items.map(async (item) => {
+            const url = await getDownloadURL(item);
+            engagementDayUrls.push({ url, name: item.name });
+          }));
+      
+          await Promise.all(engagementPartySnapshot.items.map(async (item) => {
+            const url = await getDownloadURL(item);
+            engagementPartyUrls.push({ url, name: item.name });
+          }));
+      
+          // Sort the URLs by name
+          engagementDayUrls.sort((a, b) => a.name.localeCompare(b.name));
+          engagementPartyUrls.sort((a, b) => a.name.localeCompare(b.name));
+      
+          setPhotos({ 
+            engagementDay: engagementDayUrls.map(photo => photo.url), 
+            engagementParty: engagementPartyUrls.map(photo => photo.url) 
+          });
+      
+          // Fetch user names and create mapping to photos
+          const userDocs = await getDocs(collection(engagementPhotosDb, 'users'));
+          const userNameMap = {};
+          userDocs.forEach(doc => {
+            const userData = doc.data();
+            if (userData.photos) {
+              userData.photos.forEach(photo => {
+                userNameMap[photo.url] = userData.name;
+              });
+            }
+          });
+      
+          setUsers(userNameMap);
+          setLoading(false);
+          setCurrentPhotos(engagementDayUrls.slice(0, photosPerPage).map(photo => photo.url)); // Default to Engagement Day
+        } catch (error) {
+          console.error("Error fetching photos: ", error);
+          setLoading(false);
+        }
+      };
+      
 
     fetchPhotos();
   }, []);
