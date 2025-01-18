@@ -90,7 +90,7 @@ const theme = createTheme({
       },
     },
     MuiTypography: {
-      fontFamily: 'Parisienne'
+      fontFamily: 'Charm'
     },
   },
 });

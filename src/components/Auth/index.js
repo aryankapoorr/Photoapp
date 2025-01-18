@@ -15,7 +15,7 @@ import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import './styles.css';
 
 // Import the graphic from the constants directory
-import graphic from '../../constants/detailedLetters.jpg';
+import graphic from '../../constants/aak2.jpg';
 
 const Auth = () => {
   const [email, setEmail] = useState('');

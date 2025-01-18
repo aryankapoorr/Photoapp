@@ -203,7 +203,7 @@ const LandingPage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleRetake} sx={{color: '#705C53'}}>
-            Retake
+            Cancel
           </Button>
           <Button onClick={handleUpload} sx={{color: '#0000FF'}}>
             Upload
